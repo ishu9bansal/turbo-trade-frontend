@@ -86,7 +86,7 @@ export default function ResultViewer({ data }: Props) {
           <LineChart data={dailyData}>
             <XAxis dataKey="date" />
             <YAxis />
-            <Tooltip formatter={(v) => `₹${v.toFixed(2)}`} />
+            <Tooltip formatter={(v) => `₹${Number(v).toFixed(2)}`} />
             <CartesianGrid stroke="#ccc" />
             <Line
               type="monotone"
