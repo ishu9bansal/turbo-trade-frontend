@@ -47,19 +47,19 @@ export default function BacktestForm() {
           symbol: "NIFTY",
           step: 50,
           expiry: {
-            weekday: "THU",
+            weekday: 3, // 3 for Thursday
             frequency: "WEEKLY",
           },
         },
         legs: [
           {
             strike: { offset: 0 },
-            type: "CALL",
+            type: "CE",
             transaction: "SELL",
           },
           {
             strike: { offset: 0 },
-            type: "PUT",
+            type: "PE",
             transaction: "SELL",
           },
         ],
@@ -248,8 +248,8 @@ export default function BacktestForm() {
               control={control}
               render={({ field }) => (
                 <TextField label="Expiry Weekday" select fullWidth {...field}>
-                  {DAYS.map((d) => (
-                    <MenuItem key={d} value={d}>
+                  {DAYS.map((d, i) => (
+                    <MenuItem key={d} value={i}>
                       {d}
                     </MenuItem>
                   ))}

@@ -4,7 +4,7 @@ import { z } from "zod";
 export const SYMBOLS = ["NIFTY", "BANKNIFTY"] as const;
 export const DAYS = ["MON", "TUE", "WED", "THU", "FRI"] as const;
 export const FREQS = ["WEEKLY", "MONTHLY"] as const;
-export const OPTION_TYPES = ["CALL", "PUT"] as const;
+export const OPTION_TYPES = ["CE", "PE"] as const;
 export const TRANSACTION_TYPES = ["BUY", "SELL"] as const;
 
 // Schema for validating the form
@@ -30,7 +30,7 @@ export const backtestSchema = z.object({
       symbol: z.enum(SYMBOLS),
       step: z.number().min(1),
       expiry: z.object({
-        weekday: z.enum(DAYS),
+        weekday: z.number().min(0).max(6), // 0-6 for days of the week
         frequency: z.enum(FREQS),
       }),
     }),
