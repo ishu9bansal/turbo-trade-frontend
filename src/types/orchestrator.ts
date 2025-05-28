@@ -12,7 +12,7 @@ export const backtestSchema = z.object({
   start_date: z.string().min(1, "Start date is required"),
   end_date: z.string().min(1, "End date is required"),
   capital: z.number().min(1),
-  lot_size: z.number().min(1),
+  lot_size: z.coerce.number().min(1),
 
   position: z.object({
     per_day_positions_threshold: z.number().min(1),
