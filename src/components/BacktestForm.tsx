@@ -35,17 +35,17 @@ export default function BacktestForm() {
   } = useForm<BacktestFormData>({
     resolver: zodResolver(backtestSchema),
     defaultValues: {
-      start_date: "",
-      end_date: "",
+      start_date: "2022-06-01",
+      end_date: "2022-06-09",
       capital: 100000,
-      lot_size: 1,
+      lot_size: 50,
       position: {
         entry: { time: "09:15" },
-        exit: { time: "15:15", movement: undefined },
-        per_day_positions_threshold: 1,
+        exit: { time: "15:00", movement: 100 },
+        per_day_positions_threshold: 5,
         focus: {
           symbol: "NIFTY",
-          step: 100,
+          step: 50,
           expiry: {
             weekday: "THU",
             frequency: "WEEKLY",
@@ -55,6 +55,11 @@ export default function BacktestForm() {
           {
             strike: { offset: 0 },
             type: "CALL",
+            transaction: "SELL",
+          },
+          {
+            strike: { offset: 0 },
+            type: "PUT",
             transaction: "SELL",
           },
         ],
