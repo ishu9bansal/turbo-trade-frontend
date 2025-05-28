@@ -93,7 +93,7 @@ export default function BacktestForm() {
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Grid container spacing={2}>
           {/* Start & End Date */}
-          <Grid item xs={6}>
+          <Grid>
             <Controller
               name="start_date"
               control={control}
@@ -110,7 +110,7 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid>
             <Controller
               name="end_date"
               control={control}
@@ -129,7 +129,7 @@ export default function BacktestForm() {
           </Grid>
 
           {/* Capital & Lot size */}
-          <Grid item xs={6}>
+          <Grid>
             <Controller
               name="capital"
               control={control}
@@ -145,7 +145,7 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid>
             <Controller
               name="lot_size"
               control={control}
@@ -163,12 +163,12 @@ export default function BacktestForm() {
           </Grid>
 
           <Divider />
-          <Grid item xs={12}>
+          <Grid>
             <Typography variant="h6">Position Settings</Typography>
           </Grid>
 
           {/* Entry Time */}
-          <Grid item xs={6}>
+          <Grid>
             <Controller
               name="position.entry.time"
               control={control}
@@ -186,7 +186,7 @@ export default function BacktestForm() {
           </Grid>
 
           {/* Exit Time & Movement */}
-          <Grid item xs={6}>
+          <Grid>
             <Controller
               name="position.exit.time"
               control={control}
@@ -202,7 +202,7 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid>
             <Controller
               name="position.exit.movement"
               control={control}
@@ -218,7 +218,7 @@ export default function BacktestForm() {
           </Grid>
 
           {/* Focus */}
-          <Grid item xs={6}>
+          <Grid>
             <Controller
               name="position.focus.symbol"
               control={control}
@@ -233,7 +233,7 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid>
             <Controller
               name="position.focus.step"
               control={control}
@@ -242,7 +242,7 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid>
             <Controller
               name="position.focus.expiry.weekday"
               control={control}
@@ -257,7 +257,7 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid>
             <Controller
               name="position.focus.expiry.frequency"
               control={control}
@@ -274,12 +274,12 @@ export default function BacktestForm() {
           </Grid>
 
           {/* Legs */}
-          <Grid item xs={12}>
+          <Grid>
             <Typography variant="h6">Legs</Typography>
           </Grid>
           {fields.map((leg, index) => (
             <Grid container spacing={2} key={leg.id} alignItems="center">
-              <Grid item xs={3}>
+              <Grid>
                 <Controller
                   name={`position.legs.${index}.strike.offset`}
                   control={control}
@@ -288,7 +288,7 @@ export default function BacktestForm() {
                   )}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid>
                 <Controller
                   name={`position.legs.${index}.type`}
                   control={control}
@@ -303,7 +303,7 @@ export default function BacktestForm() {
                   )}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid>
                 <Controller
                   name={`position.legs.${index}.transaction`}
                   control={control}
@@ -318,20 +318,20 @@ export default function BacktestForm() {
                   )}
                 />
               </Grid>
-              <Grid item xs={1}>
+              <Grid>
                 <IconButton onClick={() => remove(index)}>
                   <DeleteIcon />
                 </IconButton>
               </Grid>
             </Grid>
           ))}
-          <Grid item xs={12}>
-            <Button variant="outlined" onClick={() => append({ strike: { offset: 0 }, type: "CALL", transaction: "SELL" })}>
+          <Grid>
+            <Button variant="outlined" onClick={() => append({ strike: { offset: 0 }, type: "CE", transaction: "SELL" })}>
               Add Leg
             </Button>
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid>
             <Button type="submit" variant="contained" disabled={loading}>
               {loading ? "Running..." : "Run Backtest"}
             </Button>
@@ -342,8 +342,8 @@ export default function BacktestForm() {
         </Grid>
       </form>
 
-      {result && Array.isArray(result.daily) && (
-        <ResultViewer data={result.daily} />
+      {result && Array.isArray(result.data) && (
+        <ResultViewer data={result.data} />
         )}
 
     </Box>
