@@ -1,5 +1,10 @@
-import Home from './pages/Home';
+import BacktestForm from "./components/BacktestForm";
+import Layout from "./components/Layout";
 
-const App = () => <Home />;
-
-export default App;
+export default function App() {
+  return (
+    <Layout>
+      <BacktestForm />
+    </Layout>
+  );
+}
