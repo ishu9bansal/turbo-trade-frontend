@@ -91,9 +91,9 @@ export default function BacktestForm() {
       </Typography>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} columns={12}>
           {/* Start & End Date */}
-          <Grid>
+          <Grid size={3}>
             <Controller
               name="start_date"
               control={control}
@@ -110,7 +110,7 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid>
+          <Grid size={3}>
             <Controller
               name="end_date"
               control={control}
@@ -129,7 +129,7 @@ export default function BacktestForm() {
           </Grid>
 
           {/* Capital & Lot size */}
-          <Grid>
+          <Grid size={2}>
             <Controller
               name="capital"
               control={control}
@@ -145,7 +145,7 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid>
+          <Grid size={2}>
             <Controller
               name="lot_size"
               control={control}
@@ -161,14 +161,13 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-
           <Divider />
-          <Grid>
+          <Grid size={12}>
             <Typography variant="h6">Position Settings</Typography>
           </Grid>
 
           {/* Entry Time */}
-          <Grid>
+          <Grid size={2.5}>
             <Controller
               name="position.entry.time"
               control={control}
@@ -186,7 +185,7 @@ export default function BacktestForm() {
           </Grid>
 
           {/* Exit Time & Movement */}
-          <Grid>
+          <Grid size={2.5}>
             <Controller
               name="position.exit.time"
               control={control}
@@ -202,13 +201,27 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid>
+          <Grid size={2.5}>
             <Controller
               name="position.exit.movement"
               control={control}
               render={({ field }) => (
                 <TextField
-                  label="Exit Movement (Optional)"
+                  label="Exit Movement"
+                  type="number"
+                  fullWidth
+                  {...field}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={2.5}>
+            <Controller
+              name="position.per_day_positions_threshold"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  label="Max Positions per day"
                   type="number"
                   fullWidth
                   {...field}
@@ -218,7 +231,11 @@ export default function BacktestForm() {
           </Grid>
 
           {/* Focus */}
-          <Grid>
+          <Divider />
+          <Grid size={12}>
+            <Typography variant="h6">Focus Settings</Typography>
+          </Grid>
+          <Grid size={2}>
             <Controller
               name="position.focus.symbol"
               control={control}
@@ -233,7 +250,7 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid>
+          <Grid size={2}>
             <Controller
               name="position.focus.step"
               control={control}
@@ -242,7 +259,7 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid>
+          <Grid size={3}>
             <Controller
               name="position.focus.expiry.weekday"
               control={control}
@@ -257,7 +274,7 @@ export default function BacktestForm() {
               )}
             />
           </Grid>
-          <Grid>
+          <Grid size={3}>
             <Controller
               name="position.focus.expiry.frequency"
               control={control}
@@ -274,7 +291,8 @@ export default function BacktestForm() {
           </Grid>
 
           {/* Legs */}
-          <Grid>
+          <Divider />
+          <Grid size={12}>
             <Typography variant="h6">Legs</Typography>
           </Grid>
           {fields.map((leg, index) => (
