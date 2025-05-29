@@ -296,8 +296,8 @@ export default function BacktestForm() {
             <Typography variant="h6">Legs</Typography>
           </Grid>
           {fields.map((leg, index) => (
-            <Grid container spacing={2} key={leg.id} alignItems="center">
-              <Grid>
+            <Grid container spacing={2} key={leg.id} alignItems="center" size={12}>
+              <Grid size={2}>
                 <Controller
                   name={`position.legs.${index}.strike.offset`}
                   control={control}
@@ -306,7 +306,7 @@ export default function BacktestForm() {
                   )}
                 />
               </Grid>
-              <Grid>
+              <Grid size={3}>
                 <Controller
                   name={`position.legs.${index}.type`}
                   control={control}
@@ -321,7 +321,7 @@ export default function BacktestForm() {
                   )}
                 />
               </Grid>
-              <Grid>
+              <Grid size={3}>
                 <Controller
                   name={`position.legs.${index}.transaction`}
                   control={control}
@@ -336,20 +336,21 @@ export default function BacktestForm() {
                   )}
                 />
               </Grid>
-              <Grid>
+              <Grid size={2} display="flex" justifyContent="center">
                 <IconButton onClick={() => remove(index)}>
                   <DeleteIcon />
                 </IconButton>
               </Grid>
             </Grid>
           ))}
-          <Grid>
+          <Grid size={12}>
             <Button variant="outlined" onClick={() => append({ strike: { offset: 0 }, type: "CE", transaction: "SELL" })}>
               Add Leg
             </Button>
           </Grid>
 
-          <Grid>
+
+          <Grid size={12} display="flex" justifyContent="flex-end" style={{ marginTop: "3rem" }}>
             <Button type="submit" variant="contained" disabled={loading}>
               {loading ? "Running..." : "Run Backtest"}
             </Button>
