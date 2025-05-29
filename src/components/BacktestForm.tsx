@@ -23,7 +23,6 @@ import { postBacktest } from "../api/backtest";
 import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ResultViewer from "./ResultViewer";
-import { transformApiDataToOrders } from "../utils";
 
 export default function BacktestForm() {
   const [loading, setLoading] = useState(false);
@@ -344,7 +343,7 @@ export default function BacktestForm() {
       </form>
 
       {result && (
-        <ResultViewer data={transformApiDataToOrders(result.data)} />
+        <ResultViewer data={result.data} />
         )}
 
     </Box>

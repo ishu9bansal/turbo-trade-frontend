@@ -25,7 +25,7 @@ type RawOrder = {
   entry_price: number;
   quantity: number;
   transaction_type: "BUY" | "SELL";
-  date: string;
+  entry_time: string;
 };
 
 type Props = {
@@ -48,9 +48,10 @@ export default function ResultViewer({ data }: Props) {
   const dailyData: DailyResult[] = useMemo(() => {
     const map = new Map<string, number>();
 
-    data.forEach(({ date, entry_price, quantity, transaction_type }) => {
+    data.forEach(({ entry_time, entry_price, quantity, transaction_type }) => {
       const amount = entry_price * quantity;
       const pnl = transaction_type === "SELL" ? amount : -amount;
+      const date = new Date(entry_time).toISOString().split("T")[0]; // Get date in YYYY-MM-DD format
       map.set(date, (map.get(date) || 0) + pnl);
     });
 
