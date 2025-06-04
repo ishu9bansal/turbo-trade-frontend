@@ -8,13 +8,12 @@ export interface BacktestResponse {
   initial_capital: number;
 }
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 export async function postBacktest(config: BacktestFormData): Promise<BacktestResponse> {
   try {
-    const response = await axios.post<BacktestResponse>(
-      // "http://127.0.0.1:8000/backtest",
-      "https://turbo-trade.onrender.com/backtest",
-      config
-    );
+    const url = `${BASE_URL}/backtest`;
+    const response = await axios.post<BacktestResponse>(url, config);
     return response.data;
   } catch (error: any) {
     console.error("Error during backtest:", error);
