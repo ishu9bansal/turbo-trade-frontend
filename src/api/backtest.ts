@@ -1,10 +1,11 @@
 import axios from "axios";
 import { type BacktestFormData } from "../types/orchestrator";
+import type { RawOrder } from "../types/types";
 
 // Define the shape of the API response
 export interface BacktestResponse {
   status: "success";
-  data: Record<string, any>; // You can narrow this further once format stabilizes
+  data: RawOrder[]; // You can narrow this further once format stabilizes
   initial_capital: number;
 }
 

@@ -19,14 +19,14 @@ import {
   OPTION_TYPES,
   TRANSACTION_TYPES,
 } from "../types/orchestrator";
-import { postBacktest } from "../api/backtest";
+import { postBacktest, type BacktestResponse } from "../api/backtest";
 import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ResultViewer from "./ResultViewer";
 
 export default function BacktestForm() {
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<BacktestResponse | null>(null);
   const {
     control,
     handleSubmit,
