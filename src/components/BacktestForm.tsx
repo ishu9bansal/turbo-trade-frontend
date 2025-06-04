@@ -19,14 +19,16 @@ import {
   OPTION_TYPES,
   TRANSACTION_TYPES,
 } from "../types/orchestrator";
-import { postBacktest, type BacktestResponse } from "../api/backtest";
-import { useState } from "react";
+import { getContracts, postBacktest, type BacktestResponse } from "../api/backtest";
+import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ResultViewer from "./ResultViewer";
 
 export default function BacktestForm() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<BacktestResponse | null>(null);
+  const [disabledDates, setDisabledDates] = useState(false);
+  const [dateRange, setDateRange] = useState<{ start: string, end:string }>({ start: "2022-06-01", end: "2022-06-01" });
   const {
     control,
     handleSubmit,
@@ -84,6 +86,22 @@ export default function BacktestForm() {
     }
   };
 
+  const onInit = async () => {
+    setDisabledDates(true);
+    try {
+      const range = await getDateRange();
+      setDateRange(range);
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setDisabledDates(false);
+    }
+  };
+
+  useEffect(() => {
+    onInit();
+  }, []);
+
   return (
     <Box p={4}>
       <Typography variant="h5" gutterBottom>
@@ -101,6 +119,8 @@ export default function BacktestForm() {
                 <TextField
                   label="Start Date"
                   type="date"
+                  inputProps={{ min: dateRange.start, max: dateRange.end }}
+                  disabled={disabledDates}
                   InputLabelProps={{ shrink: true }}
                   fullWidth
                   error={!!errors.start_date}
@@ -118,6 +138,8 @@ export default function BacktestForm() {
                 <TextField
                   label="End Date"
                   type="date"
+                  inputProps={{ min: dateRange.start, max: dateRange.end }}
+                  disabled={disabledDates}
                   InputLabelProps={{ shrink: true }}
                   fullWidth
                   error={!!errors.end_date}
@@ -367,4 +389,23 @@ export default function BacktestForm() {
 
     </Box>
   );
+}
+
+
+async function getDateRange(): Promise<{ start: string, end: string }> {
+  // TODO: placeholder method, needs to be optimized alot
+  const contracts = await getContracts();
+  const dates = contracts.map(c => new Date(c.expiry).toISOString().split("T")[0]).sort();
+  const range = {
+    start: sixDaysAgo(dates[0]),
+    end: dates[dates.length -1],
+  };
+  // console.log("range: ", range);
+  return range;
+}
+
+function sixDaysAgo(dateStr: string): string {
+  const date = new Date(dateStr);
+  date.setDate(date.getDate() - 6);
+  return date.toISOString().split("T")[0];
 }

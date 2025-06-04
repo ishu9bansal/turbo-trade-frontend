@@ -1,6 +1,6 @@
 import axios from "axios";
 import { type BacktestFormData } from "../types/orchestrator";
-import type { RawOrder } from "../types/types";
+import type { Contract, RawOrder } from "../types/types";
 
 // Define the shape of the API response
 export interface BacktestResponse {
@@ -18,6 +18,17 @@ export async function postBacktest(config: BacktestFormData): Promise<BacktestRe
     return response.data;
   } catch (error: any) {
     console.error("Error during backtest:", error);
+    throw new Error(error?.response?.data?.detail || "Unknown error");
+  }
+}
+
+export async function getContracts(): Promise<Contract[]> {
+  try {
+    const url = `${BASE_URL}/contracts/NIFTY`;
+    const response = await axios.get<Contract[]>(url);
+    return response.data;
+  } catch (error: any) {
+    console.error("Error fetching contracts:", error);
     throw new Error(error?.response?.data?.detail || "Unknown error");
   }
 }
