@@ -20,13 +20,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useState, useMemo } from "react";
-
-type RawOrder = {
-  entry_price: number;
-  quantity: number;
-  transaction_type: "BUY" | "SELL";
-  entry_time: string;
-};
+import type { RawOrder } from "../types/types";
 
 type Props = {
   data: RawOrder[];
