@@ -73,7 +73,7 @@ const ContractScatterPlot: React.FC = () => {
         <Tooltip
           cursor={{ strokeDasharray: "3 3" }}
           formatter={(value, name) =>
-            name === "x" ? dayjs(value as number).format("YYYY-MM-DD") : value
+            name === "Expiry" ? dayjs(value as number).format("YYYY-MM-DD") : value
           }
           labelFormatter={() => ""}
         />
