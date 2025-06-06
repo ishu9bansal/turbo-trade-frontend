@@ -52,3 +52,41 @@ export default tseslint.config({
   },
 })
 ```
+
+## Arch Design
+```mermaid
+graph TD
+  subgraph Frontend
+    A[React Web App]
+  end
+
+  subgraph ConfigBackend[Configuration Backend - Node.js]
+    B1[Strategy Management API]
+    B2[User Authentication & Profile]
+    B3[Backtesting API]
+  end
+
+  subgraph EngineBackend[Trading Engine - Python]
+    C1[Backtest Runner]
+  end
+
+  subgraph Database
+    D1[(User Data)]
+    D2[(Strategy Configurations)]
+    D3[(Backtest History)]
+  end
+
+  subgraph DataLayer[Market Data]
+    E1[Options Minute Data]
+  end
+
+  A -->|REST| B1
+  A -->|REST| B2
+  A -->|REST| B3
+  B3 -->|Call API| C1
+  C1 -->|Fetch| E1
+  C1 -->|Return results| B3
+  B3 -->|Store Results| D3
+  B1 -->|Store/Retrieve| D2
+  B2 -->|Store/Retrieve| D1
+```
