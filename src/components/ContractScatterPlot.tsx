@@ -60,7 +60,7 @@ const ContractScatterPlot: React.FC = () => {
           dataKey="x"
           name="Expiry"
           domain={["auto", "auto"]}
-          tickFormatter={(ts) => dayjs(ts).format("MMM DD")}
+          tickFormatter={(ts) => dayjs(ts).format("YY MMM")}
           tick={{ fontSize: 12 }}
         />
         <YAxis
@@ -78,8 +78,8 @@ const ContractScatterPlot: React.FC = () => {
           labelFormatter={() => ""}
         />
         <Legend />
-        <Scatter name="Call (CE)" data={ceData} fill="#8884d8" />
-        <Scatter name="Put (PE)" data={peData} fill="#82ca9d" />
+        <Scatter name="Call (CE)" data={ceData} fill="#8884d8" fillOpacity={0.2} />
+        <Scatter name="Put (PE)" data={peData} fill="#82ca9d" fillOpacity={0.2} />
       </ScatterChart>
     </ResponsiveContainer>
   );
