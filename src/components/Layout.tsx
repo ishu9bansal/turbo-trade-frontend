@@ -20,13 +20,15 @@ export default function Layout({ children }: PropsWithChildren) {
   useEffect(() => {
     // Update the selected tab based on current path
     if (location.pathname === "/") setTab(0);
-    else if (location.pathname === "/plot") setTab(1);
+    else if (location.pathname === "/backtest") setTab(1);
+    else if (location.pathname === "/plot") setTab(2);
   }, [location.pathname]);
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
     if (newValue === 0) navigate("/");
-    else if (newValue === 1) navigate("/plot");
+    else if (newValue === 1) navigate("/backtest");
+    else if (newValue === 2) navigate("/plot")
   };
 
   return (
@@ -38,6 +40,7 @@ export default function Layout({ children }: PropsWithChildren) {
           </Typography>
           <Tabs value={tab} onChange={handleChange} textColor="inherit" indicatorColor="secondary">
             <Tab label="Home" />
+            <Tab label="BackTest" />
             <Tab label="Plot" />
           </Tabs>
           <Box sx={{ color: "black", display: 'flex', alignItems: 'center', gap: 2 }}>
