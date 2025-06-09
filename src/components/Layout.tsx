@@ -5,11 +5,12 @@ import {
   Container,
   Tabs,
   Tab,
-  Box
+  Box,
+  Button
 } from "@mui/material";
 import { type PropsWithChildren, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react';
 
 export default function Layout({ children }: PropsWithChildren) {
   const location = useLocation();
@@ -39,34 +40,24 @@ export default function Layout({ children }: PropsWithChildren) {
             <Tab label="Home" />
             <Tab label="Plot" />
           </Tabs>
-          <Box sx={{ color:"black", display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box sx={{ color: "black", display: 'flex', alignItems: 'center', gap: 2 }}>
             <SignedOut>
-              <SignInButton
+              <SignInButton mode="modal">
+                <Button
+                  sx={{ color: 'white'}}
+                >
+                  Sign In
+                </Button>
+              </SignInButton>
+              <SignUpButton
                 mode="modal"
-                appearance={{
-                  elements: {
-                    button: {
-                      background: 'transparent',
-                      color: 'white',
-                      fontWeight: 500,
-                      fontSize: '0.875rem',
-                      padding: '6px 12px',
-                      minWidth: '48px',
-                      minHeight: '48px',
-                      textTransform: 'none',
-                      border: 'none',
-                      borderRadius: 0,
-                      transition: 'background-color 0.3s ease',
-                      '&:hover': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                      },
-                      '&:focus': {
-                        outline: 'none',
-                      },
-                    },
-                  },
-                }}
-              />
+              >
+                <Button
+                  sx={{ color: 'white' }}
+                >
+                  Sign Up
+                </Button>
+              </SignUpButton>
             </SignedOut>
 
             <SignedIn>
@@ -77,7 +68,7 @@ export default function Layout({ children }: PropsWithChildren) {
                     userButtonAvatarBox: {
                       width: '32px',
                       height: '32px',
-                      borderRadius: '4px',
+                      borderRadius: "100%",
                       '&:hover': {
                         outline: '2px solid rgba(255,255,255,0.4)',
                       },
