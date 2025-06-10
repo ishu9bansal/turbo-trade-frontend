@@ -10,11 +10,12 @@ import {
 } from "@mui/material";
 import { type PropsWithChildren, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react';
 
 export default function Layout({ children }: PropsWithChildren) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { isSignedIn } = useUser();
   const [tab, setTab] = useState(0);
 
   useEffect(() => {
@@ -39,9 +40,11 @@ export default function Layout({ children }: PropsWithChildren) {
             Turbo Trade - Backtest Dashboard
           </Typography>
           <Tabs value={tab} onChange={handleChange} textColor="inherit" indicatorColor="secondary">
+            <Tabs value={tab} onChange={handleChange} textColor="inherit" indicatorColor="secondary">
             <Tab label="Home" />
-            <Tab label="BackTest" />
-            <Tab label="Plot" />
+            {isSignedIn && <Tab label="BackTest" />}
+            {isSignedIn && <Tab label="Plot" />}
+          </Tabs>
           </Tabs>
           <Box sx={{ color: "black", display: 'flex', alignItems: 'center', gap: 2 }}>
             <SignedOut>
