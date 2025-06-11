@@ -1,32 +1,25 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import BacktestForm from "./components/BacktestForm";
 import Layout from "./components/Layout";
-import ContractScatterPlot from "./components/ContractScatterPlot";
-import LandingPage from "./pages/LandingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+import protectedRoutes from "./routes/protectedRoutes";
+import publicRoutes from "./routes/publicRoutes";
 
 export default function App() {
   return (
     <Router>
       <Layout>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route
-            path="/backtest"
-            element={
-              <ProtectedRoute>
-                <BacktestForm />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/plot"
-            element={
-              <ProtectedRoute>
-                <ContractScatterPlot />
-              </ProtectedRoute>
-            }
-          />
+          {publicRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
+          {protectedRoutes.map(({ path, element }) => (
+            <Route
+              key={path}
+              path={path}
+              element={<ProtectedRoute>{element}</ProtectedRoute>}
+            />
+          ))}
         </Routes>
       </Layout>
     </Router>

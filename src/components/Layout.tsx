@@ -8,59 +8,67 @@ import {
   Box,
   Button
 } from "@mui/material";
-import { type PropsWithChildren, useEffect, useState } from "react";
+import { type PropsWithChildren } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react';
+import publicRoutes from "../routes/publicRoutes";
+import protectedRoutes from "../routes/protectedRoutes";
+import {
+  appBarStyles,
+  toolbarStyles,
+  titleStyles,
+  tabsStyles,
+  authBoxStyles,
+  userAvatarStyles,
+  containerStyles
+} from "../styles/Layout.styles";
 
 export default function Layout({ children }: PropsWithChildren) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isSignedIn } = useUser();
-  const [tab, setTab] = useState(0);
+  const { isSignedIn, user } = useUser();
+  // const { getToken } = useAuth();
+  console.log(user);
 
-  useEffect(() => {
-    // Update the selected tab based on current path
-    if (location.pathname === "/") setTab(0);
-    else if (location.pathname === "/backtest") setTab(1);
-    else if (location.pathname === "/plot") setTab(2);
-  }, [location.pathname]);
+  // const saveToken = getToken().then(data=> console.log(data));
 
-  const handleChange = (_: React.SyntheticEvent, newValue: number) => {
-    setTab(newValue);
-    if (newValue === 0) navigate("/");
-    else if (newValue === 1) navigate("/backtest");
-    else if (newValue === 2) navigate("/plot")
+  // console.log(saveToken);
+
+  const allTabs = isSignedIn
+    ? [...publicRoutes, ...protectedRoutes]
+    : publicRoutes;
+
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
+    navigate(newValue); // newValue is now pathname
   };
 
   return (
     <>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+      <AppBar sx={appBarStyles}>
+        <Toolbar sx={toolbarStyles}>
+          <Typography variant="h6" sx={titleStyles}>
             Turbo Trade - Backtest Dashboard
           </Typography>
-          <Tabs value={tab} onChange={handleChange} textColor="inherit" indicatorColor="secondary">
-            <Tabs value={tab} onChange={handleChange} textColor="inherit" indicatorColor="secondary">
-            <Tab label="Home" />
-            {isSignedIn && <Tab label="BackTest" />}
-            {isSignedIn && <Tab label="Plot" />}
+          <Tabs
+            value={location.pathname}
+            onChange={handleChange}
+            textColor="inherit"
+            indicatorColor="secondary"
+            sx={tabsStyles}
+          >
+            {allTabs.map((tab, index) => (
+              <Tab key={index} label={tab.label} value={tab.path} />
+            ))}
           </Tabs>
-          </Tabs>
-          <Box sx={{ color: "black", display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box sx={authBoxStyles}>
             <SignedOut>
               <SignInButton mode="modal">
-                <Button
-                  sx={{ color: 'white'}}
-                >
+                <Button sx={{ color: 'white'}} >
                   Sign In
                 </Button>
               </SignInButton>
-              <SignUpButton
-                mode="modal"
-              >
-                <Button
-                  sx={{ color: 'white' }}
-                >
+              <SignUpButton mode="modal" >
+                <Button sx={{ color: 'white' }} >
                   Sign Up
                 </Button>
               </SignUpButton>
@@ -68,25 +76,15 @@ export default function Layout({ children }: PropsWithChildren) {
 
             <SignedIn>
               <UserButton
-                afterSignOutUrl="/"
                 appearance={{
-                  elements: {
-                    userButtonAvatarBox: {
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: "100%",
-                      '&:hover': {
-                        outline: '2px solid rgba(255,255,255,0.4)',
-                      },
-                    },
-                  },
+                  elements: { userButtonAvatarBox: userAvatarStyles },
                 }}
               />
             </SignedIn>
           </Box>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Container maxWidth="md" sx={containerStyles}>
         {children}
       </Container>
     </>
