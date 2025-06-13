@@ -25,14 +25,18 @@ export const authBoxStyles: SxProps = {
     marginLeft: 2,
 };
 
-export const userAvatarStyles = {
-    width: "32px",
-    height: "32px",
-    borderRadius: "100%",
-    "&:hover": {
-        outline: "2px solid rgba(255,255,255,0.4)",
-    },
-};
+export const userButtonStyle = {
+    elements: {
+        userAvatarStyles: {
+            width: "32px",
+            height: "32px",
+            borderRadius: "100%",
+            "&:hover": {
+                outline: "2px solid rgba(255,255,255,0.4)",
+            },
+        }
+    }
+}
 
 export const containerStyles: SxProps = {
     mt: 4,

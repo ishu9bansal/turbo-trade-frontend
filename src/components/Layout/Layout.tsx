@@ -11,17 +11,17 @@ import {
 import { type PropsWithChildren } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react';
-import publicRoutes from "../routes/publicRoutes";
-import protectedRoutes from "../routes/protectedRoutes";
+import publicRoutes from "../../routes/publicRoutes";
+import protectedRoutes from "../../routes/protectedRoutes";
 import {
   appBarStyles,
   toolbarStyles,
   titleStyles,
   tabsStyles,
   authBoxStyles,
-  userAvatarStyles,
-  containerStyles
-} from "../styles/Layout.styles";
+  containerStyles,
+  userButtonStyle
+} from "./Layout.styles";
 
 export default function Layout({ children }: PropsWithChildren) {
   const location = useLocation();
@@ -76,9 +76,7 @@ export default function Layout({ children }: PropsWithChildren) {
 
             <SignedIn>
               <UserButton
-                appearance={{
-                  elements: { userButtonAvatarBox: userAvatarStyles },
-                }}
+                appearance={userButtonStyle}
               />
             </SignedIn>
           </Box>
