@@ -11,8 +11,7 @@ import {
 import { type PropsWithChildren } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react';
-import publicRoutes from "../../routes/publicRoutes";
-import protectedRoutes from "../../routes/protectedRoutes";
+import allRoutes from "../../routes/allRoutes";
 import {
   appBarStyles,
   toolbarStyles,
@@ -26,17 +25,12 @@ import {
 export default function Layout({ children }: PropsWithChildren) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isSignedIn, user } = useUser();
-  // const { getToken } = useAuth();
-  console.log(user);
+  const {isSignedIn} = useUser(); 
 
   // const saveToken = getToken().then(data=> console.log(data));
 
+  const currentRoutes = isSignedIn ? allRoutes : allRoutes.filter(route => route.public);
   // console.log(saveToken);
-
-  const allTabs = isSignedIn
-    ? [...publicRoutes, ...protectedRoutes]
-    : publicRoutes;
 
   const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     navigate(newValue); // newValue is now pathname
@@ -56,7 +50,7 @@ export default function Layout({ children }: PropsWithChildren) {
             indicatorColor="secondary"
             sx={tabsStyles}
           >
-            {allTabs.map((tab, index) => (
+            {currentRoutes.map((tab, index) => (
               <Tab key={index} label={tab.label} value={tab.path} />
             ))}
           </Tabs>
