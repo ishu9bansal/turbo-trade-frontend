@@ -1,16 +1,17 @@
 // components/ProtectedRoute.tsx
+import React, {type JSX } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { Navigate } from "react-router-dom";
-import type { ReactNode } from "react";
 
-interface Props {
-    children: ReactNode;
-}
+// Higher Order Component
+export default function ProtectedRoute<P extends JSX.IntrinsicAttributes>(
+    Component: React.ComponentType<P>
+) {
+    return function ProtectedComponent(props: P) {
+        const { isSignedIn, isLoaded } = useUser();
 
-export default function ProtectedRoute({ children }: Props) {
-    const { isSignedIn, isLoaded } = useUser();
+        if (!isLoaded) return null; // Show a loader if needed
 
-    if (!isLoaded) return null; // Optionally show loader
-
-    return isSignedIn ? <>{children}</> : <Navigate to="/" />;
+        return isSignedIn ? <Component {...props} /> : <Navigate to="/" />;
+    };
 }

@@ -23,8 +23,9 @@ import { getContracts, postBacktest, type BacktestResponse } from "../api/backte
 import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ResultViewer from "./ResultViewer";
+import ProtectedRoute from "./ProtectedRoute";
 
-export default function BacktestForm() {
+function BacktestForm() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<BacktestResponse | null>(null);
   const [disabledDates, setDisabledDates] = useState(false);
@@ -409,3 +410,5 @@ function sixDaysAgo(dateStr: string): string {
   date.setDate(date.getDate() - 6);
   return date.toISOString().split("T")[0];
 }
+
+export default ProtectedRoute(BacktestForm);

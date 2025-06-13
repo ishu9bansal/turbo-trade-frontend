@@ -12,6 +12,7 @@ import {
 import dayjs from "dayjs";
 import { getContracts } from "../api/backtest"; // adjust path if needed
 import type { Contract } from "../types/types";
+import ProtectedRoute from "./ProtectedRoute";
 
 const ContractScatterPlot: React.FC = () => {
   const [data, setData] = useState<Contract[]>([]);
@@ -85,4 +86,4 @@ const ContractScatterPlot: React.FC = () => {
   );
 };
 
-export default ContractScatterPlot;
+export default ProtectedRoute(ContractScatterPlot)
