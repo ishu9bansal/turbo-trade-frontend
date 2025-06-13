@@ -19,11 +19,12 @@ import {
   OPTION_TYPES,
   TRANSACTION_TYPES,
 } from "../types/orchestrator";
-import { getContracts, postBacktest, type BacktestResponse } from "../api/backtest";
+import { getConfig, getContracts, postBacktest, type BacktestResponse } from "../api/backtest";
 import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ResultViewer from "./ResultViewer";
 import ProtectedRoute from "./ProtectedRoute";
+import { DEFAULT_FORM_DATA } from "../types/constants";
 
 function BacktestForm() {
   const [loading, setLoading] = useState(false);
@@ -37,37 +38,7 @@ function BacktestForm() {
     formState: { errors },
   } = useForm<BacktestFormData>({
     resolver: zodResolver(backtestSchema),
-    defaultValues: {
-      start_date: "2022-06-01",
-      end_date: "2022-06-09",
-      capital: 100000,
-      lot_size: 50,
-      position: {
-        entry: { time: "09:15" },
-        exit: { time: "15:00", movement: 100 },
-        per_day_positions_threshold: 5,
-        focus: {
-          symbol: "NIFTY",
-          step: 50,
-          expiry: {
-            weekday: 3, // 3 for Thursday
-            frequency: "WEEKLY",
-          },
-        },
-        legs: [
-          {
-            strike: { offset: 0 },
-            type: "CE",
-            transaction: "SELL",
-          },
-          {
-            strike: { offset: 0 },
-            type: "PE",
-            transaction: "SELL",
-          },
-        ],
-      },
-    },
+    defaultValues: DEFAULT_FORM_DATA,
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -90,6 +61,8 @@ function BacktestForm() {
   const onInit = async () => {
     setDisabledDates(true);
     try {
+      const defaultValues = await getConfig();
+      reset(defaultValues);
       const range = await getDateRange();
       setDateRange(range);
     } catch (err: any) {
