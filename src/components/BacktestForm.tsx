@@ -24,12 +24,18 @@ import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ResultViewer from "./ResultViewer";
 import ProtectedRoute from "./ProtectedRoute";
+import { useAuth } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 function BacktestForm() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<BacktestResponse | null>(null);
   const [disabledDates, setDisabledDates] = useState(false);
-  const [dateRange, setDateRange] = useState<{ start: string, end:string }>({ start: "2022-06-01", end: "2022-06-01" });
+  const [dateRange, setDateRange] = useState<{ start: string, end: string }>({ start: "2022-06-01", end: "2022-06-01" });
+
+  const { getToken } = useAuth();
+  const navigate = useNavigate();
+
   const {
     control,
     handleSubmit,
@@ -78,14 +84,22 @@ function BacktestForm() {
   const onSubmit = async (data: BacktestFormData) => {
     setLoading(true);
     try {
-      const response = await postBacktest(data);
+      const freshToken = await getToken();
+      if (!freshToken) throw new Error("Unable to get authentication token.");
+
+      const response = await postBacktest(data, freshToken);
       setResult(response);
+
+      // Redirect to history page after successful backtest
+      navigate("/history");
     } catch (err: any) {
       alert(err.message);
     } finally {
       setLoading(false);
     }
   };
+
+
 
   const onInit = async () => {
     setDisabledDates(true);
@@ -386,7 +400,7 @@ function BacktestForm() {
 
       {result && (
         <ResultViewer data={result.data} />
-        )}
+      )}
 
     </Box>
   );
@@ -399,7 +413,7 @@ async function getDateRange(): Promise<{ start: string, end: string }> {
   const dates = contracts.map(c => new Date(c.expiry).toISOString().split("T")[0]).sort();
   const range = {
     start: sixDaysAgo(dates[0]),
-    end: dates[dates.length -1],
+    end: dates[dates.length - 1],
   };
   // console.log("range: ", range);
   return range;
