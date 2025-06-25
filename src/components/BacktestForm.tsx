@@ -19,7 +19,7 @@ import {
   OPTION_TYPES,
   TRANSACTION_TYPES,
 } from "../types/orchestrator";
-import { getContracts, postBacktest, type BacktestResponse } from "../api/backtest";
+import { getConfig, getContracts, postBacktest, type BacktestResponse } from "../api/backtest";
 import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ResultViewer from "./ResultViewer";
@@ -104,8 +104,13 @@ function BacktestForm() {
   const onInit = async () => {
     setDisabledDates(true);
     try {
-      const range = await getDateRange();
-      setDateRange(range);
+      const freshToken = await getToken();
+      if (freshToken) {
+        const defaultValues = await getConfig(freshToken);
+        reset(defaultValues);
+        const range = await getDateRange(freshToken);
+        setDateRange(range);
+      }
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -115,7 +120,7 @@ function BacktestForm() {
 
   useEffect(() => {
     onInit();
-  }, []);
+  }, [getToken]);
 
   return (
     <Box p={4}>
@@ -407,9 +412,9 @@ function BacktestForm() {
 }
 
 
-async function getDateRange(): Promise<{ start: string, end: string }> {
+async function getDateRange(token: string): Promise<{ start: string, end: string }> {
   // TODO: placeholder method, needs to be optimized alot
-  const contracts = await getContracts();
+  const contracts = await getContracts(token);
   const dates = contracts.map(c => new Date(c.expiry).toISOString().split("T")[0]).sort();
   const range = {
     start: sixDaysAgo(dates[0]),
