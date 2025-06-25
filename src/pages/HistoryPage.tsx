@@ -3,19 +3,25 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import StrategyCard from "../components/StrategyCard";
-import { getStrategyHistory } from "../api/backtest" // ✅ Adjust path if needed
+import { getBacktestHistory } from "../api/backtest"
+import { useAuth } from "@clerk/clerk-react";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const HistoryPage = () => {
     const [strategies, setStrategies] = useState([]);
+    const { getToken } = useAuth()
 
     useEffect(() => {
         const fetchStrategies = async () => {
-            const data = await getStrategyHistory();
+            const freshToken = await getToken();
+            if (!freshToken) throw new Error("Unable to get authentication token.");
+
+            const data = await getBacktestHistory(freshToken);
             setStrategies(data);
         };
 
         fetchStrategies();
-    }, []);
+    }, [getToken]);
 
     console.log(strategies)
 
@@ -35,4 +41,4 @@ const HistoryPage = () => {
     );
 };
 
-export default HistoryPage;
+export default ProtectedRoute(HistoryPage);
