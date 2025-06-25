@@ -8,12 +8,12 @@ export const DEFAULT_FORM_DATA = {
         exit: { time: "15:00", movement: 100 },
         per_day_positions_threshold: 5,
         focus: {
-            symbol: "NIFTY" as const,
-            step: 50,
-            expiry: {
-                weekday: 3, // 3 for Thursday
-                frequency: "WEEKLY" as const,
-            },
+                symbol: "NIFTY" as const,
+                step: 50,
+                expiry: {
+                    weekday: 3, // 3 for Thursday
+                    frequency: "WEEKLY" as const,
+                },
         },
         legs: [
             {

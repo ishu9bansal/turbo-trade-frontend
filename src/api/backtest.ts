@@ -1,7 +1,7 @@
 import axios from "axios";
 import { type BacktestFormData } from "../types/orchestrator";
 import type { Contract, RawOrder } from "../types/types";
-import { DEFAULT_FORM_DATA } from "..//types/constants";
+import { DEFAULT_FORM_DATA } from "../types/constants";
 
 // Define the shape of the API response
 export interface BacktestResponse {
