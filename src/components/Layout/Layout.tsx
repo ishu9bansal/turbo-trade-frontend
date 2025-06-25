@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { type PropsWithChildren } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, useAuth, UserButton, useUser } from '@clerk/clerk-react';
 import allRoutes from "../../routes/allRoutes";
 import {
   appBarStyles,
@@ -25,12 +25,13 @@ import {
 export default function Layout({ children }: PropsWithChildren) {
   const location = useLocation();
   const navigate = useNavigate();
-  const {isSignedIn} = useUser(); 
+  const {isSignedIn} = useUser();
+  const { getToken } = useAuth();
 
-  // const saveToken = getToken().then(data=> console.log(data));
+  const saveToken = getToken().then(data=> console.log(data));
 
   const currentRoutes = isSignedIn ? allRoutes : allRoutes.filter(route => route.public);
-  // console.log(saveToken);
+  console.log(saveToken);
 
   const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     navigate(newValue); // newValue is now pathname

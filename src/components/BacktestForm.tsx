@@ -24,13 +24,19 @@ import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ResultViewer from "./ResultViewer";
 import ProtectedRoute from "./ProtectedRoute";
+import { useAuth } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 import { DEFAULT_FORM_DATA } from "../types/constants";
 
 function BacktestForm() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<BacktestResponse | null>(null);
   const [disabledDates, setDisabledDates] = useState(false);
-  const [dateRange, setDateRange] = useState<{ start: string, end:string }>({ start: "2022-06-01", end: "2022-06-01" });
+  const [dateRange, setDateRange] = useState<{ start: string, end: string }>({ start: "2022-06-01", end: "2022-06-01" });
+
+  const { getToken } = useAuth();
+  const navigate = useNavigate();
+
   const {
     control,
     handleSubmit,
@@ -49,8 +55,14 @@ function BacktestForm() {
   const onSubmit = async (data: BacktestFormData) => {
     setLoading(true);
     try {
-      const response = await postBacktest(data);
+      const freshToken = await getToken();
+      if (!freshToken) throw new Error("Unable to get authentication token.");
+
+      const response = await postBacktest(data, freshToken);
       setResult(response);
+
+      // Redirect to history page after successful backtest
+      navigate("/history");
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -58,13 +70,18 @@ function BacktestForm() {
     }
   };
 
+
+
   const onInit = async () => {
     setDisabledDates(true);
     try {
-      const defaultValues = await getConfig();
-      reset(defaultValues);
-      const range = await getDateRange();
-      setDateRange(range);
+      const freshToken = await getToken();
+      if (freshToken) {
+        const defaultValues = await getConfig(freshToken);
+        reset(defaultValues);
+        const range = await getDateRange(freshToken);
+        setDateRange(range);
+      }
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -74,7 +91,7 @@ function BacktestForm() {
 
   useEffect(() => {
     onInit();
-  }, []);
+  }, [getToken]);
 
   return (
     <Box p={4}>
@@ -359,20 +376,20 @@ function BacktestForm() {
 
       {result && (
         <ResultViewer data={result.data} />
-        )}
+      )}
 
     </Box>
   );
 }
 
 
-async function getDateRange(): Promise<{ start: string, end: string }> {
+async function getDateRange(token: string): Promise<{ start: string, end: string }> {
   // TODO: placeholder method, needs to be optimized alot
-  const contracts = await getContracts();
+  const contracts = await getContracts(token);
   const dates = contracts.map(c => new Date(c.expiry).toISOString().split("T")[0]).sort();
   const range = {
     start: sixDaysAgo(dates[0]),
-    end: dates[dates.length -1],
+    end: dates[dates.length - 1],
   };
   // console.log("range: ", range);
   return range;

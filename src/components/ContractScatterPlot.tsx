@@ -13,16 +13,21 @@ import dayjs from "dayjs";
 import { getContracts } from "../api/backtest"; // adjust path if needed
 import type { Contract } from "../types/types";
 import ProtectedRoute from "./ProtectedRoute";
+import { useAuth } from "@clerk/clerk-react";
 
 const ContractScatterPlot: React.FC = () => {
   const [data, setData] = useState<Contract[]>([]);
   const [loading, setLoading] = useState(true);
+  const {getToken} = useAuth();
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const contracts = await getContracts();
-        setData(contracts);
+        const freshToken = await getToken();
+        if(freshToken){
+          const contracts = await getContracts(freshToken);
+          setData(contracts);
+        }
       } catch (error) {
         console.error("Failed to load contracts", error);
       } finally {
@@ -31,7 +36,7 @@ const ContractScatterPlot: React.FC = () => {
     }
 
     fetchData();
-  }, []);
+  }, [getToken]);
 
   // Map contract data to chart format
   const ceData = data
