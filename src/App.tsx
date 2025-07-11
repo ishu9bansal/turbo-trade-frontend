@@ -1,15 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import BacktestForm from "./components/BacktestForm";
-import Layout from "./components/Layout";
-import ContractScatterPlot from "./components/ContractScatterPlot"; // Adjust path if needed
+import Layout from "./components/Layout/Layout";
+
+import allRoutes from "./routes/allRoutes";
 
 export default function App() {
   return (
     <Router>
       <Layout>
         <Routes>
-          <Route path="/" element={<BacktestForm />} />
-          <Route path="/plot" element={<ContractScatterPlot />} />
+          {allRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
         </Routes>
       </Layout>
     </Router>
