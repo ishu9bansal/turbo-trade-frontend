@@ -19,17 +19,19 @@ import {
   OPTION_TYPES,
   TRANSACTION_TYPES,
 } from "../types/orchestrator";
-import { getConfig, getContracts, postBacktest, type BacktestResponse } from "../api/backtest";
+import { getConfig, getContracts, postBacktest } from "../api/backtest";
 import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ResultViewer from "./ResultViewer";
 import ProtectedRoute from "./ProtectedRoute";
 import { DEFAULT_FORM_DATA } from "../types/constants";
+import { useAuth } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 function BacktestForm() {
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<BacktestResponse | null>(null);
   const [disabledDates, setDisabledDates] = useState(false);
+  const { getToken } = useAuth();
+  const navigate = useNavigate();
   const [dateRange, setDateRange] = useState<{ start: string, end:string }>({ start: "2022-06-01", end: "2022-06-01" });
   const {
     control,
@@ -49,8 +51,11 @@ function BacktestForm() {
   const onSubmit = async (data: BacktestFormData) => {
     setLoading(true);
     try {
-      const response = await postBacktest(data);
-      setResult(response);
+      const token = await getToken();
+      const response = await postBacktest(data, token);
+      // show alert and then navigate to history
+      alert(`Backtest started with ID: ${response.backtestId}`);
+      navigate("/history");
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -356,10 +361,6 @@ function BacktestForm() {
           </Grid>
         </Grid>
       </form>
-
-      {result && (
-        <ResultViewer data={result.data} />
-        )}
 
     </Box>
   );
