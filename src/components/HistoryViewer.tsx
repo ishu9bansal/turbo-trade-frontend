@@ -107,7 +107,7 @@ export default function HistoryViewer() {
 
   useEffect(() => {
     onInit();
-  });
+  }, []);
 
   return (
     <Box mt={4}>
