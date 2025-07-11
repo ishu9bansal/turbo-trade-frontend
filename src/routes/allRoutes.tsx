@@ -1,5 +1,6 @@
 import BacktestForm from "../components/BacktestForm";
 import ContractScatterPlot from "../components/ContractScatterPlot";
+import HistoryViewer from "../components/HistoryViewer";
 import LandingPage from "../pages/LandingPage";
 
 const allRoutes = [
@@ -13,6 +14,12 @@ const allRoutes = [
     path: "/backtest",
     element: <BacktestForm />,
     label: "Backtest",
+    public: false
+  },
+  {
+    path: "/history",
+    element: <HistoryViewer />,
+    label: "History",
     public: false
   },
   {

@@ -15,3 +15,9 @@ export type Contract = {
     symbol: string; // e.g., "NIFTY"
     id: string; // Unique identifier for the contract
 }
+
+export type BacktestResult = {
+  results: {
+    data: RawOrder[]
+  } | null;
+};
