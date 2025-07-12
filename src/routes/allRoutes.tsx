@@ -1,6 +1,6 @@
 import BacktestForm from "../components/BacktestForm";
-import ContractScatterPlot from "../components/ContractScatterPlot";
-import HistoryViewer from "../components/HistoryViewer";
+import ContractScatterPlot from "../pages/PlotPage";
+import HistoryViewer from "../pages/HistoryPage";
 import LandingPage from "../pages/LandingPage";
 
 const allRoutes = [
