@@ -1,4 +1,4 @@
-import BacktestForm from "../components/BacktestForm";
+import BacktestForm from "../pages/InputPage";
 import ContractScatterPlot from "../pages/PlotPage";
 import HistoryViewer from "../pages/HistoryPage";
 import LandingPage from "../pages/LandingPage";
