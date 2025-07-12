@@ -1,7 +1,6 @@
 import { Box } from '@mui/material';
-import HeroSection from '../components/HeroSection';
-import FeaturesSection from '../components/FeaturesSection';
-import StrategyBuilder from '../components/StrategyBuilder';
+import { FeaturesSection, HeroSection, StrategyBuilder } from '../components/LandingComponents';
+
 
 const LandingPage = () => {
     return (
