@@ -1,27 +1,17 @@
-// components/ResultDialog.tsx
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  ToggleButton,
-  ToggleButtonGroup,
-  Paper,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
+  Dialog, DialogContent, DialogTitle, Paper,
+  Table, TableBody, TableCell, TableHead, TableRow, ToggleButton, ToggleButtonGroup
 } from "@mui/material";
+import { useMemo, useState } from "react";
 import {
-  ResponsiveContainer,
-  LineChart,
+  CartesianGrid,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  CartesianGrid,
 } from "recharts";
-import { useMemo, useState } from "react";
 import type { BacktestResult } from "../types/types";
 
 export function ResultDialog({
@@ -64,53 +54,67 @@ export function ResultDialog({
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>Result {index !== null ? index + 1 : ""}</DialogTitle>
       <DialogContent>
-        <ToggleButtonGroup
-          value={view}
-          exclusive
-          onChange={(_, newView) => newView && setView(newView)}
-          size="small"
-          sx={{ mb: 2 }}
-        >
-          <ToggleButton value="chart">Chart</ToggleButton>
-          <ToggleButton value="table">Table</ToggleButton>
-        </ToggleButtonGroup>
-
-        {view === "chart" ? (
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={dailyData}>
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip formatter={(v) => `₹${Number(v).toFixed(2)}`} />
-              <CartesianGrid stroke="#ccc" />
-              <Line
-                type="monotone"
-                dataKey="pnl"
-                stroke="#1976d2"
-                strokeWidth={2}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        ) : (
-          <Paper>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell>PnL (₹)</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {dailyData.map((row, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell>{row.date}</TableCell>
-                    <TableCell>{row.pnl.toFixed(2)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        )}
+        <ViewToggle view={view} onChange={setView} />
+        {view === "chart" ? <PnLChart data={dailyData} /> : <PnLTable data={dailyData} />}
       </DialogContent>
     </Dialog>
+  );
+}
+
+function ViewToggle({
+  view,
+  onChange,
+}: {
+  view: "table" | "chart";
+  onChange: (view: "table" | "chart") => void;
+}) {
+  return (
+    <ToggleButtonGroup
+      value={view}
+      exclusive
+      onChange={(_, newView) => newView && onChange(newView)}
+      size="small"
+      sx={{ mb: 2 }}
+    >
+      <ToggleButton value="chart">Chart</ToggleButton>
+      <ToggleButton value="table">Table</ToggleButton>
+    </ToggleButtonGroup>
+  );
+}
+
+function PnLChart({ data }: { data: { date: string; pnl: number }[] }) {
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={data}>
+        <XAxis dataKey="date" />
+        <YAxis />
+        <Tooltip formatter={(v) => `₹${Number(v).toFixed(2)}`} />
+        <CartesianGrid stroke="#ccc" />
+        <Line type="monotone" dataKey="pnl" stroke="#1976d2" strokeWidth={2} />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}
+
+function PnLTable({ data }: { data: { date: string; pnl: number }[] }) {
+  return (
+    <Paper>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Date</TableCell>
+            <TableCell>PnL (₹)</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((row, idx) => (
+            <TableRow key={idx}>
+              <TableCell>{row.date}</TableCell>
+              <TableCell>{row.pnl.toFixed(2)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </Paper>
   );
 }
