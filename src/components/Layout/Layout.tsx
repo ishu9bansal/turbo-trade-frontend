@@ -76,7 +76,7 @@ export default function Layout({ children }: PropsWithChildren) {
           </Box>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="md" sx={containerStyles}>
+      <Container sx={containerStyles}>
         {children}
       </Container>
     </>
