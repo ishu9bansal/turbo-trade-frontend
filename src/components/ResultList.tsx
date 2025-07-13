@@ -8,7 +8,7 @@ import {
   Stack,
 } from "@mui/material";
 import type { BacktestResult, RawOrder } from "../types/types";
-import { format } from "date-fns";
+import { format, differenceInSeconds } from "date-fns";
 
 function getSummary(orders: RawOrder[]) {
   let totalPnl = 0;
@@ -46,6 +46,12 @@ function getStatusChip(status: BacktestResult["status"]) {
   return <Chip label={label} color={color} size="small" />;
 }
 
+function formatDuration(seconds: number) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}m ${secs}s`;
+}
+
 export function ResultList({
   results,
   onSelect,
@@ -64,6 +70,13 @@ export function ResultList({
 
         const primary = `Strategy ${idx + 1}: ${symbol} | Legs: ${legsCount}`;
         let secondary = `Created: ${format(new Date(created_at), "yyyy-MM-dd HH:mm")}`;
+
+        const created = new Date(created_at);
+        const updated = new Date(updated_at);
+        const durationSeconds = differenceInSeconds(updated, created);
+        const processingTime = formatDuration(durationSeconds);
+
+        secondary += ` | Processing Time: ${processingTime}`;
 
         if (status === "completed" && summary) {
           secondary += ` | Duration: ${summary.start} → ${summary.end} | ₹${summary.totalPnl.toFixed(2)}`;
