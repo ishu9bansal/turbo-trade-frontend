@@ -11,11 +11,11 @@ export const TRANSACTION_TYPES = ["BUY", "SELL"] as const;
 export const backtestSchema = z.object({
   start_date: z.string().min(1, "Start date is required"),
   end_date: z.string().min(1, "End date is required"),
-  capital: z.number().min(1),
+  capital: z.coerce.number().min(1),
   lot_size: z.coerce.number().min(1),
 
   position: z.object({
-    per_day_positions_threshold: z.number().min(1),
+    per_day_positions_threshold: z.coerce.number().min(1),
 
     entry: z.object({
       time: z.string().min(1),
@@ -23,14 +23,14 @@ export const backtestSchema = z.object({
 
     exit: z.object({
       time: z.string().min(1),
-      movement: z.number().optional(),
+      movement: z.coerce.number().optional(),
     }),
 
     focus: z.object({
       symbol: z.enum(SYMBOLS),
-      step: z.number().min(1),
+      step: z.coerce.number().min(1),
       expiry: z.object({
-        weekday: z.number().min(0).max(6), // 0-6 for days of the week
+        weekday: z.coerce.number().min(0).max(6), // 0-6 for days of the week
         frequency: z.enum(FREQS),
       }),
     }),
@@ -39,7 +39,7 @@ export const backtestSchema = z.object({
       .array(
         z.object({
           strike: z.object({
-            offset: z.number().min(0),
+            offset: z.coerce.number(),
           }),
           type: z.enum(OPTION_TYPES),
           transaction: z.enum(TRANSACTION_TYPES),

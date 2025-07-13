@@ -80,50 +80,51 @@ function StrategyConfig({ result }: { result: BacktestResult }) {
         <Typography variant="subtitle1">Strategy Config</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Grid container spacing={2} alignItems="center">
-          <Grid size={6}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <AccessTimeIcon fontSize="small" />
-              <Typography variant="body2" color="text.secondary">Entry:</Typography>
-              <Typography variant="body1">{position.entry.time}</Typography>
-            </Stack>
-          </Grid>
-          <Grid size={6}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <AccessTimeIcon fontSize="small" />
-              <Typography variant="body2" color="text.secondary">Exit:</Typography>
-              <Typography variant="body1">{position.exit.time}</Typography>
-            </Stack>
-          </Grid>
-          <Grid size={6}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <ShowChartIcon fontSize="small" />
-              <Typography variant="body2" color="text.secondary">Symbol:</Typography>
-              <Typography variant="body1">{position.focus.symbol}</Typography>
-            </Stack>
-          </Grid>
-          <Grid size={6}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <CurrencyRupeeIcon fontSize="small" />
-              <Typography variant="body2" color="text.secondary">Capital:</Typography>
-              <Typography variant="body1">₹{strategy.capital.toLocaleString()}</Typography>
-            </Stack>
-          </Grid>
-          <Grid size={6}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <StackedLineChartIcon fontSize="small" />
-              <Typography variant="body2" color="text.secondary">Lot Size:</Typography>
-              <Typography variant="body1">{strategy.lot_size}</Typography>
-            </Stack>
-          </Grid>
-          <Grid size={6}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <FormatListNumberedIcon fontSize="small" />
-              <Typography variant="body2" color="text.secondary">Positions/day:</Typography>
-              <Typography variant="body1">{position.per_day_positions_threshold}</Typography>
-            </Stack>
-          </Grid>
-          <Grid size={12}>
+        <Grid container spacing={1}>
+          <Grid container size={6} spacing={2} alignItems="center">
+            <Grid size={6}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <AccessTimeIcon fontSize="small" />
+                <Typography variant="body2" color="text.secondary">Entry:</Typography>
+                <Typography variant="body1">{position.entry.time}</Typography>
+              </Stack>
+            </Grid>
+            <Grid size={6}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <AccessTimeIcon fontSize="small" />
+                <Typography variant="body2" color="text.secondary">Exit:</Typography>
+                <Typography variant="body1">{position.exit.time}</Typography>
+              </Stack>
+            </Grid>
+            <Grid size={6}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <ShowChartIcon fontSize="small" />
+                <Typography variant="body2" color="text.secondary">Symbol:</Typography>
+                <Typography variant="body1">{position.focus.symbol}</Typography>
+              </Stack>
+            </Grid>
+            <Grid size={6}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <CurrencyRupeeIcon fontSize="small" />
+                <Typography variant="body2" color="text.secondary">Capital:</Typography>
+                <Typography variant="body1">₹{strategy.capital.toLocaleString()}</Typography>
+              </Stack>
+            </Grid>
+            <Grid size={6}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <StackedLineChartIcon fontSize="small" />
+                <Typography variant="body2" color="text.secondary">Lot Size:</Typography>
+                <Typography variant="body1">{strategy.lot_size}</Typography>
+              </Stack>
+            </Grid>
+            <Grid size={6}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <FormatListNumberedIcon fontSize="small" />
+                <Typography variant="body2" color="text.secondary">Positions/day:</Typography>
+                <Typography variant="body1">{position.per_day_positions_threshold}</Typography>
+              </Stack>
+            </Grid>
+            <Grid size={12}>
             <Stack direction="row" spacing={1} alignItems="center">
               <EventNoteIcon fontSize="small" />
               <Typography variant="body2" color="text.secondary">Expiry Day:</Typography>
@@ -136,20 +137,23 @@ function StrategyConfig({ result }: { result: BacktestResult }) {
               </ToggleButtonGroup>
             </Stack>
           </Grid>
-          <Grid size={12}>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              Legs:
-            </Typography>
-            <Stack spacing={1}>
-              {position.legs.map((leg, i) => (
-                <Chip
-                  key={i}
-                  label={`${leg.transaction} ${leg.type} @ offset ${leg.strike.offset}`}
-                  color={leg.transaction === "BUY" ? "success" : "error"}
-                  variant="outlined"
-                />
-              ))}
-            </Stack>
+          </Grid>
+          <Grid container size={6} spacing={2}>
+            <Grid size={12}>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Legs:
+              </Typography>
+              <Stack spacing={1}>
+                {position.legs.map((leg, i) => (
+                  <Chip
+                    key={i}
+                    label={`${leg.transaction} ${leg.type} @ offset ${leg.strike.offset}`}
+                    color={leg.transaction === "BUY" ? "success" : "error"}
+                    variant="outlined"
+                  />
+                ))}
+              </Stack>
+            </Grid>
           </Grid>
         </Grid>
       </AccordionDetails>
