@@ -14,6 +14,23 @@ import {
 } from "recharts";
 import type { BacktestResult } from "../types/types";
 
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Grid,
+  Chip,
+  Stack,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ShowChartIcon from "@mui/icons-material/ShowChart";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import StackedLineChartIcon from "@mui/icons-material/StackedLineChart";
+import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
+import EventNoteIcon from "@mui/icons-material/EventNote";
+
 export function ResultDialog({
   onClose,
   result,
@@ -50,10 +67,100 @@ export function ResultDialog({
     <Dialog open={!!result} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>Result</DialogTitle>
       <DialogContent>
+        <StrategyConfig result={result} />
         <ViewToggle view={view} onChange={setView} />
         {view === "chart" ? <PnLChart data={dailyData} /> : <PnLTable data={dailyData} />}
       </DialogContent>
     </Dialog>
+  );
+}
+
+function StrategyConfig({ result }: { result: BacktestResult | null }) {
+  if (!result) return null;
+  const strategy = result.strategy;
+  const { position } = strategy;
+  const expiryDay = position.focus.expiry.weekday;
+
+  return (
+    <Accordion sx={{ mb: 2 }}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="subtitle1">Strategy Config</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Grid container spacing={2} alignItems="center">
+          <Grid size={6}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <AccessTimeIcon fontSize="small" />
+              <Typography variant="body2" color="text.secondary">Entry:</Typography>
+              <Typography variant="body1">{position.entry.time}</Typography>
+            </Stack>
+          </Grid>
+          <Grid size={6}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <AccessTimeIcon fontSize="small" />
+              <Typography variant="body2" color="text.secondary">Exit:</Typography>
+              <Typography variant="body1">{position.exit.time}</Typography>
+            </Stack>
+          </Grid>
+          <Grid size={6}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <ShowChartIcon fontSize="small" />
+              <Typography variant="body2" color="text.secondary">Symbol:</Typography>
+              <Typography variant="body1">{position.focus.symbol}</Typography>
+            </Stack>
+          </Grid>
+          <Grid size={6}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <CurrencyRupeeIcon fontSize="small" />
+              <Typography variant="body2" color="text.secondary">Capital:</Typography>
+              <Typography variant="body1">₹{strategy.capital.toLocaleString()}</Typography>
+            </Stack>
+          </Grid>
+          <Grid size={6}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <StackedLineChartIcon fontSize="small" />
+              <Typography variant="body2" color="text.secondary">Lot Size:</Typography>
+              <Typography variant="body1">{strategy.lot_size}</Typography>
+            </Stack>
+          </Grid>
+          <Grid size={6}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <FormatListNumberedIcon fontSize="small" />
+              <Typography variant="body2" color="text.secondary">Positions/day:</Typography>
+              <Typography variant="body1">{position.per_day_positions_threshold}</Typography>
+            </Stack>
+          </Grid>
+          <Grid size={12}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <EventNoteIcon fontSize="small" />
+              <Typography variant="body2" color="text.secondary">Expiry Day:</Typography>
+              <ToggleButtonGroup exclusive size="small" value={expiryDay} sx={{ ml: 1 }}>
+                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, idx) => (
+                  <ToggleButton key={day} value={idx} disabled>
+                    {day}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            </Stack>
+          </Grid>
+          <Grid size={12}>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Legs:
+            </Typography>
+            <Stack spacing={1}>
+              {position.legs.map((leg, i) => (
+                <Chip
+                  key={i}
+                  label={`${leg.transaction} ${leg.type} @ offset ${leg.strike.offset}`}
+                  color={leg.transaction === "BUY" ? "success" : "error"}
+                  variant="outlined"
+                />
+              ))}
+            </Stack>
+          </Grid>
+        </Grid>
+      </AccordionDetails>
+    </Accordion>
   );
 }
 
