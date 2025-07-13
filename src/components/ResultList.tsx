@@ -1,11 +1,13 @@
 // components/ResultList.tsx
 import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   Chip,
-  Stack,
 } from "@mui/material";
 import type { BacktestResult, RawOrder } from "../types/types";
 import { format, differenceInSeconds } from "date-fns";
@@ -59,49 +61,54 @@ export function ResultList({
   results: BacktestResult[];
   onSelect: (index: number) => void;
 }) {
+  const sortedResults = [...results].sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
+
   return (
-    <List>
-      {results.map((result, idx) => {
-        const { strategy, status, created_at, updated_at, results: resultData, error } = result;
+    <TableContainer component={Paper}>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>Status</TableCell>
+            <TableCell>Symbol</TableCell>
+            <TableCell>Legs</TableCell>
+            <TableCell>Start Date</TableCell>
+            <TableCell>End Date</TableCell>
+            <TableCell>Created At</TableCell>
+            <TableCell>Processing Time</TableCell>
+            <TableCell>PnL (₹)</TableCell>
+            {/* <TableCell>Action</TableCell> */}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {sortedResults.map((result, idx) => {
+            const { strategy, status, created_at, updated_at, results: resultData } = result;
 
-        const summary = resultData?.data ? getSummary(resultData.data) : null;
-        const legsCount = strategy.position.legs.length;
-        const symbol = strategy.position.focus.symbol;
+            const summary = resultData?.data ? getSummary(resultData.data) : null;
+            const legsCount = strategy.position.legs.length;
+            const symbol = strategy.position.focus.symbol;
+            const created = new Date(created_at);
+            const updated = new Date(updated_at);
+            const processingTime = formatDuration(differenceInSeconds(updated, created));
 
-        const primary = `Strategy ${idx + 1}: ${symbol} | Legs: ${legsCount}`;
-        let secondary = `Created: ${format(new Date(created_at), "yyyy-MM-dd HH:mm")}`;
-
-        const created = new Date(created_at);
-        const updated = new Date(updated_at);
-        const durationSeconds = differenceInSeconds(updated, created);
-        const processingTime = formatDuration(durationSeconds);
-
-        secondary += ` | Processing Time: ${processingTime}`;
-
-        if (status === "completed" && summary) {
-          secondary += ` | Duration: ${summary.start} → ${summary.end} | ₹${summary.totalPnl.toFixed(2)}`;
-        } else if (status === "error" && error) {
-          secondary += ` | Error: ${error}`;
-        } else {
-          secondary += ` | Status: ${status}`;
-        }
-
-        return (
-          <ListItem key={idx} disablePadding>
-            <ListItemButton onClick={() => onSelect(idx)}>
-              <ListItemText
-                primary={
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    {getStatusChip(status)}
-                    <span>{primary}</span>
-                  </Stack>
-                }
-                secondary={secondary}
-              />
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
-    </List>
+            return (
+              <TableRow key={idx} hover onClick={() => onSelect(idx)}>
+                <TableCell>{getStatusChip(status)}</TableCell>
+                <TableCell>{symbol}</TableCell>
+                <TableCell>{legsCount}</TableCell>
+                <TableCell>{strategy.start_date}</TableCell>
+                <TableCell>{strategy.end_date}</TableCell>
+                <TableCell>{format(created, "yyyy-MM-dd HH:mm")}</TableCell>
+                <TableCell>{processingTime}</TableCell>
+                <TableCell>
+                  {status === "completed" && summary ? summary.totalPnl.toFixed(2) : "-"}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
