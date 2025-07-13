@@ -59,7 +59,7 @@ export function ResultList({
   onSelect,
 }: {
   results: BacktestResult[];
-  onSelect: (index: number) => void;
+  onSelect: (result: BacktestResult) => void;
 }) {
   const sortedResults = [...results].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
@@ -93,7 +93,7 @@ export function ResultList({
             const processingTime = formatDuration(differenceInSeconds(updated, created));
 
             return (
-              <TableRow key={idx} hover onClick={() => onSelect(idx)}>
+              <TableRow key={idx} hover onClick={() => onSelect(result)}>
                 <TableCell>{getStatusChip(status)}</TableCell>
                 <TableCell>{symbol}</TableCell>
                 <TableCell>{legsCount}</TableCell>

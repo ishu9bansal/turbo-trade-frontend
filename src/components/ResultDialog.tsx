@@ -15,15 +15,11 @@ import {
 import type { BacktestResult } from "../types/types";
 
 export function ResultDialog({
-  open,
   onClose,
   result,
-  index,
 }: {
-  open: boolean;
   onClose: () => void;
   result: BacktestResult | null;
-  index: number | null;
 }) {
   const [view, setView] = useState<"table" | "chart">("chart");
 
@@ -51,8 +47,8 @@ export function ResultDialog({
   }, [result]);
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Result {index !== null ? index + 1 : ""}</DialogTitle>
+    <Dialog open={!!result} onClose={onClose} maxWidth="md" fullWidth>
+      <DialogTitle>Result</DialogTitle>
       <DialogContent>
         <ViewToggle view={view} onChange={setView} />
         {view === "chart" ? <PnLChart data={dailyData} /> : <PnLTable data={dailyData} />}

@@ -8,7 +8,7 @@ import { ResultList } from "../components/ResultList";
 import { ResultDialog } from "../components/ResultDialog";
 
 export default function HistoryViewer() {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedResult, setSelectedResult] = useState<BacktestResult | null>(null);
   const [results, setResults] = useState<BacktestResult[]>([]);
   const { getToken } = useAuth();
 
@@ -30,13 +30,11 @@ export default function HistoryViewer() {
         Backtest History
       </Typography>
 
-      <ResultList results={results} onSelect={setSelectedIndex} />
+      <ResultList results={results} onSelect={setSelectedResult} />
 
       <ResultDialog
-        open={selectedIndex !== null}
-        onClose={() => setSelectedIndex(null)}
-        result={selectedIndex !== null ? results[selectedIndex] : null}
-        index={selectedIndex}
+        onClose={() => setSelectedResult(null)}
+        result={selectedResult}
       />
     </Box>
   );
