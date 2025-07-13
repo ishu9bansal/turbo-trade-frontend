@@ -54,6 +54,11 @@ function BacktestForm() {
     }
   };
 
+  const onError = (errors: any) => {
+    console.error("Form errors:", errors);
+    alert("Please fix the errors in the form.");
+  };
+
   const onInit = async () => {
     setDisabledDates(true);
     try {
@@ -74,7 +79,7 @@ function BacktestForm() {
 
   return (
     <Box p={4} maxWidth="md" mx="auto">
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
         <Grid container spacing={2}>
           <BacktestConfig control={control} errors={errors} dateRange={dateRange} disabledDates={disabledDates} />
           <PositionSettings control={control} errors={errors} />
