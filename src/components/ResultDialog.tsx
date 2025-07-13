@@ -30,11 +30,10 @@ export function ResultDialog({
   onClose: () => void;
   result: BacktestResult | null;
 }) {
-  const [view, setView] = useState<"table" | "chart">("chart");
 
   const dailyData = useMemo(() => {
-    if (!result || result.status === "error") return [];
-    const data = result.results?.data ?? [];
+    const data = result?.results?.data || null;
+    if (!data) return data;
     const map = new Map<string, number>();
 
     data.forEach(({ entry_time, entry_price, quantity, transaction_type }) => {
@@ -60,10 +59,10 @@ export function ResultDialog({
       <DialogTitle>Result</DialogTitle>
       <DialogContent>
         {result && <StrategyConfig result={result} />}
-        {result?.status === "error" ? (
-          <ErrorView error={result.error || "Unknown error occurred."} />
+        {dailyData ? (
+          <ResultView data={dailyData} />
         ) : (
-          <ResultView data={dailyData} view={view} onViewChange={setView} />
+          <ErrorView error={result?.error} status={result?.status} />
         )}
       </DialogContent>
     </Dialog>
@@ -158,12 +157,14 @@ function StrategyConfig({ result }: { result: BacktestResult }) {
   );
 }
 
-function ErrorView({ error }: { error: string }) {
+function ErrorView({ error, status }: { error?: string | null; status?: 'completed' | 'pending' | 'error' }) {
+  const severity = status === 'pending' ? 'warning' : 'error';
+  error = status === 'pending' ? "Backtest is still running, please check back later." : error || "An unknown error occurred.";
   const isDetailed = error.length > 120 || error.includes("\n");
 
   return (
     <>
-      <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
+      <Alert severity={severity} sx={{ mt: 2 }}>{error}</Alert>
       {isDetailed && (
         <Accordion sx={{ mt: 2 }}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -178,18 +179,11 @@ function ErrorView({ error }: { error: string }) {
   );
 }
 
-function ResultView({
-  data,
-  view,
-  onViewChange,
-}: {
-  data: { date: string; pnl: number }[];
-  view: "table" | "chart";
-  onViewChange: (view: "table" | "chart") => void;
-}) {
+function ResultView({ data }: { data: { date: string; pnl: number }[] }) {
+  const [view, setView] = useState<"table" | "chart">("chart");
   return (
     <>
-      <ViewToggle view={view} onChange={onViewChange} />
+      <ViewToggle view={view} onChange={setView} />
       {view === "chart" ? <PnLChart data={data} /> : <PnLTable data={data} />}
     </>
   );
