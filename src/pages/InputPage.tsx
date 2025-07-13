@@ -73,7 +73,7 @@ function BacktestForm() {
   }, []);
 
   return (
-    <Box p={4}>
+    <Box p={4} maxWidth="md" mx="auto">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Grid container spacing={2}>
           <BacktestConfig control={control} errors={errors} dateRange={dateRange} disabledDates={disabledDates} />

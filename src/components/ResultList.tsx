@@ -1,11 +1,16 @@
 // components/ResultList.tsx
 import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Chip,
 } from "@mui/material";
 import type { BacktestResult, RawOrder } from "../types/types";
+import { format, differenceInSeconds } from "date-fns";
 
 function getSummary(orders: RawOrder[]) {
   let totalPnl = 0;
@@ -27,25 +32,83 @@ function getSummary(orders: RawOrder[]) {
   return { totalPnl, start, end };
 }
 
-export function ResultList({ results, onSelect }: {
+function getStatusChip(status: BacktestResult["status"]) {
+  const color = {
+    completed: "success" as const,
+    pending: "warning" as const,
+    error: "error" as const,
+  }[status];
+
+  const label = {
+    completed: "Completed",
+    pending: "Pending",
+    error: "Failed",
+  }[status];
+
+  return <Chip label={label} color={color} size="small" />;
+}
+
+function formatDuration(seconds: number) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}m ${secs}s`;
+}
+
+export function ResultList({
+  results,
+  onSelect,
+}: {
   results: BacktestResult[];
-  onSelect: (index: number) => void;
+  onSelect: (result: BacktestResult) => void;
 }) {
+  const sortedResults = [...results].sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
+
   return (
-    <List>
-      {results.map((result, idx) => {
-        const summary = getSummary(result.results?.data || []);
-        return (
-          <ListItem key={idx} disablePadding>
-            <ListItemButton onClick={() => onSelect(idx)}>
-              <ListItemText
-                primary={`Result ${idx + 1}`}
-                secondary={`Duration: ${summary.start} to ${summary.end} | PnL: ₹${summary.totalPnl.toFixed(2)}`}
-              />
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
-    </List>
+    <TableContainer component={Paper}>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>Status</TableCell>
+            <TableCell>Symbol</TableCell>
+            <TableCell>Legs</TableCell>
+            <TableCell>Start Date</TableCell>
+            <TableCell>End Date</TableCell>
+            <TableCell>Created At</TableCell>
+            <TableCell>Processing Time</TableCell>
+            <TableCell>PnL (₹)</TableCell>
+            {/* <TableCell>Action</TableCell> */}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {sortedResults.map((result, idx) => {
+            const { strategy, status, created_at, updated_at, results: resultData } = result;
+
+            const summary = resultData?.data ? getSummary(resultData.data) : null;
+            const legsCount = strategy.position.legs.length;
+            const symbol = strategy.position.focus.symbol;
+            const created = new Date(created_at);
+            const updated = new Date(updated_at);
+            const processingTime = formatDuration(differenceInSeconds(updated, created));
+
+            return (
+              <TableRow key={idx} hover onClick={() => onSelect(result)}>
+                <TableCell>{getStatusChip(status)}</TableCell>
+                <TableCell>{symbol}</TableCell>
+                <TableCell>{legsCount}</TableCell>
+                <TableCell>{strategy.start_date}</TableCell>
+                <TableCell>{strategy.end_date}</TableCell>
+                <TableCell>{format(created, "yyyy-MM-dd HH:mm")}</TableCell>
+                <TableCell>{processingTime}</TableCell>
+                <TableCell>
+                  {status === "completed" && summary ? summary.totalPnl.toFixed(2) : "-"}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
