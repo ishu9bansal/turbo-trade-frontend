@@ -1,6 +1,8 @@
 import {
   Dialog, DialogContent, DialogTitle, Paper,
-  Table, TableBody, TableCell, TableHead, TableRow, ToggleButton, ToggleButtonGroup
+  Table, TableBody, TableCell, TableHead, TableRow, ToggleButton, ToggleButtonGroup,
+  Accordion, AccordionSummary, AccordionDetails,
+  Typography, Grid, Chip, Stack, Box, Alert
 } from "@mui/material";
 import { useMemo, useState } from "react";
 import {
@@ -13,16 +15,6 @@ import {
   YAxis,
 } from "recharts";
 import type { BacktestResult } from "../types/types";
-
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-  Grid,
-  Chip,
-  Stack,
-} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
@@ -41,7 +33,7 @@ export function ResultDialog({
   const [view, setView] = useState<"table" | "chart">("chart");
 
   const dailyData = useMemo(() => {
-    if (!result) return [];
+    if (!result || result.status === "error") return [];
     const data = result.results?.data ?? [];
     const map = new Map<string, number>();
 
@@ -67,16 +59,18 @@ export function ResultDialog({
     <Dialog open={!!result} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>Result</DialogTitle>
       <DialogContent>
-        <StrategyConfig result={result} />
-        <ViewToggle view={view} onChange={setView} />
-        {view === "chart" ? <PnLChart data={dailyData} /> : <PnLTable data={dailyData} />}
+        {result && <StrategyConfig result={result} />}
+        {result?.status === "error" ? (
+          <ErrorView error={result.error || "Unknown error occurred."} />
+        ) : (
+          <ResultView data={dailyData} view={view} onViewChange={setView} />
+        )}
       </DialogContent>
     </Dialog>
   );
 }
 
-function StrategyConfig({ result }: { result: BacktestResult | null }) {
-  if (!result) return null;
+function StrategyConfig({ result }: { result: BacktestResult }) {
   const strategy = result.strategy;
   const { position } = strategy;
   const expiryDay = position.focus.expiry.weekday;
@@ -161,6 +155,43 @@ function StrategyConfig({ result }: { result: BacktestResult | null }) {
         </Grid>
       </AccordionDetails>
     </Accordion>
+  );
+}
+
+function ErrorView({ error }: { error: string }) {
+  const isDetailed = error.length > 120 || error.includes("\n");
+
+  return (
+    <>
+      <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
+      {isDetailed && (
+        <Accordion sx={{ mt: 2 }}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Error Details</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box component="pre" sx={{ fontSize: 12, whiteSpace: 'pre-wrap' }}>{error}</Box>
+          </AccordionDetails>
+        </Accordion>
+      )}
+    </>
+  );
+}
+
+function ResultView({
+  data,
+  view,
+  onViewChange,
+}: {
+  data: { date: string; pnl: number }[];
+  view: "table" | "chart";
+  onViewChange: (view: "table" | "chart") => void;
+}) {
+  return (
+    <>
+      <ViewToggle view={view} onChange={onViewChange} />
+      {view === "chart" ? <PnLChart data={data} /> : <PnLTable data={data} />}
+    </>
   );
 }
 
