@@ -4,8 +4,11 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Chip,
+  Stack,
 } from "@mui/material";
 import type { BacktestResult, RawOrder } from "../types/types";
+import { format } from "date-fns";
 
 function getSummary(orders: RawOrder[]) {
   let totalPnl = 0;
@@ -27,20 +30,60 @@ function getSummary(orders: RawOrder[]) {
   return { totalPnl, start, end };
 }
 
-export function ResultList({ results, onSelect }: {
+function getStatusChip(status: BacktestResult["status"]) {
+  const color = {
+    completed: "success" as const,
+    pending: "warning" as const,
+    error: "error" as const,
+  }[status];
+
+  const label = {
+    completed: "Completed",
+    pending: "Pending",
+    error: "Failed",
+  }[status];
+
+  return <Chip label={label} color={color} size="small" />;
+}
+
+export function ResultList({
+  results,
+  onSelect,
+}: {
   results: BacktestResult[];
   onSelect: (index: number) => void;
 }) {
   return (
     <List>
       {results.map((result, idx) => {
-        const summary = getSummary(result.results?.data || []);
+        const { strategy, status, created_at, updated_at, results: resultData, error } = result;
+
+        const summary = resultData?.data ? getSummary(resultData.data) : null;
+        const legsCount = strategy.position.legs.length;
+        const symbol = strategy.position.focus.symbol;
+
+        const primary = `Strategy ${idx + 1}: ${symbol} | Legs: ${legsCount}`;
+        let secondary = `Created: ${format(new Date(created_at), "yyyy-MM-dd HH:mm")}`;
+
+        if (status === "completed" && summary) {
+          secondary += ` | Duration: ${summary.start} → ${summary.end} | ₹${summary.totalPnl.toFixed(2)}`;
+        } else if (status === "error" && error) {
+          secondary += ` | Error: ${error}`;
+        } else {
+          secondary += ` | Status: ${status}`;
+        }
+
         return (
           <ListItem key={idx} disablePadding>
             <ListItemButton onClick={() => onSelect(idx)}>
               <ListItemText
-                primary={`Result ${idx + 1}`}
-                secondary={`Duration: ${summary.start} to ${summary.end} | PnL: ₹${summary.totalPnl.toFixed(2)}`}
+                primary={
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    {getStatusChip(status)}
+                    <span>{primary}</span>
+                  </Stack>
+                }
+                secondary={secondary}
               />
             </ListItemButton>
           </ListItem>
