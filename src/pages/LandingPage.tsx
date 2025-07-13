@@ -68,7 +68,13 @@ export default function TurboTradeLanding() {
         <Grid size={{xs:12, md: 6}}>
           <Grid container spacing={3} justifyContent="center">
             <Grid>
-              <Paper sx={{ bgcolor: "#161b22", color: "white", p: 2, borderRadius: 2, minWidth: 200 }}>
+              <Paper sx={{
+                    bgcolor: "#161b22",
+                    color: "white", p: 2, 
+                    transform: "rotate(1deg)",
+                    borderRadius: 2,
+                    minWidth: 200,
+                }}>
                 <Typography variant="subtitle2">Strategy Performance</Typography>
                 <Typography variant="h6" color="success.main">
                   + ₹32,540
@@ -80,7 +86,14 @@ export default function TurboTradeLanding() {
             </Grid>
 
             <Grid>
-              <Paper sx={{ bgcolor: "#161b22", color: "white", p: 2, borderRadius: 2, minWidth: 200 }}>
+              <Paper sx={{
+                bgcolor: "#161b22",
+                color: "white",
+                p: 2,
+                transform: "rotate(-1deg)",
+                borderRadius: 2,
+                minWidth: 200,
+              }}>
                 <Typography variant="subtitle2">Annual Performance</Typography>
                 <Typography variant="h6">
                   Sharpe: 1.82 <span style={{ color: "#4caf50" }}>+27.6%</span>
