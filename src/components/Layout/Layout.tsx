@@ -17,7 +17,7 @@ import {
   useTheme
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type PropsWithChildren } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -38,8 +38,13 @@ import {
   containerStyles,
   userButtonStyle
 } from "./Layout.styles";
+import { FormProvider } from "../../context/context";
+import { getConfig } from "../../api/backtest";
+import { DEFAULT_FORM_DATA } from "../../types/constants";
+import type { BacktestFormData } from "../../types/orchestrator";
 
 export default function Layout({ children }: PropsWithChildren) {
+  const [defaultFormData, setDefaultFormData] = useState<BacktestFormData>(DEFAULT_FORM_DATA);
   const location = useLocation();
   const navigate = useNavigate();
   const { isSignedIn } = useUser();
@@ -58,8 +63,21 @@ export default function Layout({ children }: PropsWithChildren) {
     setDrawerOpen(false);
   };
 
+  const onInit = async () => {
+    try {
+      const defaultValues = await getConfig();
+      setDefaultFormData(defaultValues);
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
+
+  useEffect(() => {
+    onInit();
+  }, []);
+
   return (
-    <>
+    <FormProvider value={defaultFormData}>
       <AppBar sx={appBarStyles}>
         <Toolbar sx={toolbarStyles}>
           <Typography variant="h6" sx={titleStyles}>
@@ -139,6 +157,6 @@ export default function Layout({ children }: PropsWithChildren) {
       <Container sx={containerStyles}>
         {children}
       </Container>
-    </>
+    </FormProvider>
   );
 }

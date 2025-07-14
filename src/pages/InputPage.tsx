@@ -12,9 +12,9 @@ import {
   type BacktestFormData,
   backtestSchema,
 } from "../types/orchestrator";
-import { DEFAULT_FORM_DATA } from "../types/constants";
-import { getConfig, getContracts, postBacktest } from "../api/backtest";
+import { getContracts, postBacktest } from "../api/backtest";
 import { BacktestConfig, FocusSettings, LegsSection, PositionSettings, SubmitControls } from "../components/BacktestForm";
+import { useFormContext } from "../context/context";
 
 
 function BacktestForm() {
@@ -25,6 +25,8 @@ function BacktestForm() {
   const { getToken } = useAuth();
   const navigate = useNavigate();
 
+  const defaultValues = useFormContext();
+
   const {
     control,
     handleSubmit,
@@ -32,7 +34,7 @@ function BacktestForm() {
     formState: { errors },
   } = useForm<BacktestFormData>({
     resolver: zodResolver(backtestSchema),
-    defaultValues: DEFAULT_FORM_DATA,
+    defaultValues,
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -62,8 +64,6 @@ function BacktestForm() {
   const onInit = async () => {
     setDisabledDates(true);
     try {
-      const defaultValues = await getConfig();
-      reset(defaultValues);
       const range = await getDateRange();
       setDateRange(range);
     } catch (err: any) {
