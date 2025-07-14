@@ -6,11 +6,28 @@ import {
   Tabs,
   Tab,
   Box,
-  Button
+  Button,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  useMediaQuery,
+  useTheme
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useState } from "react";
 import { type PropsWithChildren } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react';
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+  useUser
+} from '@clerk/clerk-react';
 import allRoutes from "../../routes/allRoutes";
 import {
   appBarStyles,
@@ -25,15 +42,20 @@ import {
 export default function Layout({ children }: PropsWithChildren) {
   const location = useLocation();
   const navigate = useNavigate();
-  const {isSignedIn} = useUser(); 
+  const { isSignedIn } = useUser();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  // const saveToken = getToken().then(data=> console.log(data));
-
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const currentRoutes = isSignedIn ? allRoutes : allRoutes.filter(route => route.public);
-  // console.log(saveToken);
 
-  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
-    navigate(newValue); // newValue is now pathname
+  const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
+    navigate(newValue);
+  };
+
+  const handleDrawerItemClick = (path: string) => {
+    navigate(path);
+    setDrawerOpen(false);
   };
 
   return (
@@ -41,41 +63,79 @@ export default function Layout({ children }: PropsWithChildren) {
       <AppBar sx={appBarStyles}>
         <Toolbar sx={toolbarStyles}>
           <Typography variant="h6" sx={titleStyles}>
-            Turbo Trade - Backtest Dashboard
+            Turbo Trade
           </Typography>
-          <Tabs
-            value={location.pathname}
-            onChange={handleChange}
-            textColor="inherit"
-            indicatorColor="secondary"
-            sx={tabsStyles}
-          >
-            {currentRoutes.map((tab, index) => (
-              <Tab key={index} label={tab.label} value={tab.path} />
-            ))}
-          </Tabs>
+
+          {isSmallScreen ? (
+            <>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                onClick={() => setDrawerOpen(true)}
+                sx={{ ml: 2 }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Drawer
+                anchor="left"
+                open={drawerOpen}
+                onClose={() => setDrawerOpen(false)}
+              >
+                <Box
+                  sx={{ width: 250 }}
+                  role="presentation"
+                  onClick={() => setDrawerOpen(false)}
+                  onKeyDown={() => setDrawerOpen(false)}
+                >
+                  <List>
+                    {currentRoutes.map((tab, index) => (
+                      <ListItem key={index} disablePadding>
+                        <ListItemButton onClick={() => handleDrawerItemClick(tab.path)}>
+                          <ListItemText primary={tab.label} />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+              </Drawer>
+            </>
+          ) : (
+            <Tabs
+              value={location.pathname}
+              onChange={handleTabChange}
+              textColor="inherit"
+              indicatorColor="secondary"
+              sx={tabsStyles}
+              variant="scrollable"
+              scrollButtons="auto"
+            >
+              {currentRoutes.map((tab, index) => (
+                <Tab key={index} label={tab.label} value={tab.path} />
+              ))}
+            </Tabs>
+          )}
+
           <Box sx={authBoxStyles}>
             <SignedOut>
               <SignInButton mode="modal">
-                <Button sx={{ color: 'white'}} >
+                <Button sx={{ color: 'white' }}>
                   Sign In
                 </Button>
               </SignInButton>
-              <SignUpButton mode="modal" >
-                <Button sx={{ color: 'white' }} >
+              <SignUpButton mode="modal">
+                <Button sx={{ color: 'white' }}>
                   Sign Up
                 </Button>
               </SignUpButton>
             </SignedOut>
-
             <SignedIn>
-              <UserButton
-                appearance={userButtonStyle}
-              />
+              <UserButton appearance={userButtonStyle} />
             </SignedIn>
           </Box>
         </Toolbar>
       </AppBar>
+
       <Container sx={containerStyles}>
         {children}
       </Container>
