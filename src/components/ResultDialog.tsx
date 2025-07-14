@@ -129,7 +129,7 @@ function StrategyConfig({ result }: { result: BacktestResult }) {
               <EventNoteIcon fontSize="small" />
               <Typography variant="body2" color="text.secondary">Expiry Day:</Typography>
               <ToggleButtonGroup exclusive size="small" value={expiryDay} sx={{ ml: 1 }}>
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, idx) => (
+                {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, idx) => (
                   <ToggleButton key={day} value={idx} disabled>
                     {day}
                   </ToggleButton>
