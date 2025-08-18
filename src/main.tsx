@@ -7,7 +7,7 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import TagManager from 'react-gtm-module';
 
 TagManager.initialize({
-  gtmId: 'GTM-YR39QYFHDG',
+  gtmId: 'G-YR39QYFHDG',
 });
 
 const theme = createTheme();
