@@ -4,6 +4,11 @@ import App from './App';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ClerkProvider } from '@clerk/clerk-react'
+import TagManager from 'react-gtm-module';
+
+TagManager.initialize({
+  gtmId: 'GTM-YR39QYFHDG',
+});
 
 const theme = createTheme();
 
