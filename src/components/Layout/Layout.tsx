@@ -2,7 +2,6 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Container,
   Tabs,
   Tab,
   Box,
@@ -35,7 +34,6 @@ import {
   titleStyles,
   tabsStyles,
   authBoxStyles,
-  containerStyles,
   userButtonStyle
 } from "./Layout.styles";
 import { FormProvider } from "../../context/context";
@@ -154,9 +152,7 @@ export default function Layout({ children }: PropsWithChildren) {
         </Toolbar>
       </AppBar>
 
-      <Container sx={containerStyles}>
-        {children}
-      </Container>
+      {children}
     </FormProvider>
   );
 }

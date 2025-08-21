@@ -6,8 +6,9 @@ import { useAuth } from "@clerk/clerk-react";
 import type { BacktestResult } from "../types/types";
 import { ResultList } from "../components/ResultList";
 import { ResultDialog } from "../components/ResultDialog";
+import ContainerLayout from "../components/Layout/ContainerLayout";
 
-export default function HistoryViewer() {
+function HistoryViewer() {
   const [selectedResult, setSelectedResult] = useState<BacktestResult | null>(null);
   const [results, setResults] = useState<BacktestResult[]>([]);
   const { getToken } = useAuth();
@@ -37,5 +38,13 @@ export default function HistoryViewer() {
         result={selectedResult}
       />
     </Box>
+  );
+}
+
+export default function WithContainerLayout() {
+  return (
+    <ContainerLayout>
+      <HistoryViewer />
+    </ContainerLayout>
   );
 }

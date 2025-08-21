@@ -2,6 +2,8 @@ import type { SxProps } from "@mui/material";
 
 export const appBarStyles: SxProps = {
     position: "static",
+    bgcolor: "linear-gradient(135deg, #4F46E5, #9333EA)",
+    background: "linear-gradient(135deg, #4F46E5, #9333EA)",
 };
 
 export const toolbarStyles: SxProps = {

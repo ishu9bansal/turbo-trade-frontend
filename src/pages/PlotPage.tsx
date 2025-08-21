@@ -12,7 +12,7 @@ import {
 import dayjs from "dayjs";
 import { getContracts } from "../api/backtest"; // adjust path if needed
 import type { Contract } from "../types/types";
-import ProtectedRoute from "./ProtectedRoute";
+import ContainerLayout from "../components/Layout/ContainerLayout";
 
 const ContractScatterPlot: React.FC = () => {
   const [data, setData] = useState<Contract[]>([]);
@@ -86,4 +86,10 @@ const ContractScatterPlot: React.FC = () => {
   );
 };
 
-export default ProtectedRoute(ContractScatterPlot)
+export default function WithContainerLayout() {
+  return (
+    <ContainerLayout>
+      <ContractScatterPlot />
+    </ContainerLayout>
+  );
+}

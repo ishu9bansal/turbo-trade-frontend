@@ -1,7 +1,7 @@
 import BacktestForm from "../pages/InputPage";
 import ContractScatterPlot from "../pages/PlotPage";
 import HistoryViewer from "../pages/HistoryPage";
-import LandingPage from "../pages/LandingPage";
+import LandingPage from "../pages/LandingPage2";
 
 const allRoutes = [
   {

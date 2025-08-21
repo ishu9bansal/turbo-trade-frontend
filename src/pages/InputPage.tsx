@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
-import ProtectedRoute from "./ProtectedRoute";
 import {
   type BacktestFormData,
   backtestSchema,
@@ -15,6 +14,7 @@ import {
 import { getContracts, postBacktest } from "../api/backtest";
 import { BacktestConfig, FocusSettings, LegsSection, PositionSettings, SubmitControls } from "../components/BacktestForm";
 import { useFormContext } from "../context/context";
+import ContainerLayout from "../components/Layout/ContainerLayout";
 
 
 function BacktestForm() {
@@ -107,4 +107,10 @@ function sixDaysAgo(dateStr: string): string {
   return date.toISOString().split("T")[0];
 }
 
-export default ProtectedRoute(BacktestForm);
+export default function WithContainerLayout() {
+  return (
+    <ContainerLayout>
+      <BacktestForm />
+    </ContainerLayout>
+  );
+}
