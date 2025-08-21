@@ -1,7 +1,7 @@
 import type { SxProps } from "@mui/material";
 
 export const appBarStyles: SxProps = {
-    position: "static",
+    position: "sticky",
     bgcolor: "linear-gradient(135deg, #4F46E5, #9333EA)",
     background: "linear-gradient(135deg, #4F46E5, #9333EA)",
 };
@@ -13,6 +13,8 @@ export const toolbarStyles: SxProps = {
 
 export const titleStyles: SxProps = {
     flexGrow: 1,
+    fontWeight: 800,
+    cursor: "pointer",
 };
 
 export const tabsStyles: SxProps = {

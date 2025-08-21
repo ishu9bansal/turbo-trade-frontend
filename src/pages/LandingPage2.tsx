@@ -3,6 +3,7 @@ import { Button, Container, Grid, Card, CardContent, Typography, Box } from "@mu
 import { FEATURES } from "../types/landingPageData";
 import { useAuth, useClerk } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+import { indigo, yellow } from "@mui/material/colors";
 
 export default function LandingPage() {
   const features = FEATURES;
@@ -58,11 +59,11 @@ export default function LandingPage() {
             <Button
               size="large"
               sx={{
-                bgcolor: "yellow.400",
+                bgcolor: yellow[400],
                 color: "black",
                 fontWeight: 600,
                 px: 3,
-                "&:hover": { bgcolor: "yellow.300" }
+                "&:hover": { bgcolor: yellow[300] }
               }}
               onClick={handleGetStarted}
             >
@@ -153,11 +154,11 @@ export default function LandingPage() {
           <Button
             size="large"
             sx={{
-              bgcolor: "indigo.600",
+              bgcolor: indigo[600],
               color: "white",
               fontWeight: 600,
               px: 3,
-              "&:hover": { bgcolor: "indigo.500" }
+              "&:hover": { bgcolor: indigo[500] }
             }}
             onClick={handleGetStarted}
           >

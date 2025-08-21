@@ -78,7 +78,7 @@ export default function Layout({ children }: PropsWithChildren) {
     <FormProvider value={defaultFormData}>
       <AppBar sx={appBarStyles}>
         <Toolbar sx={toolbarStyles}>
-          <Typography variant="h6" sx={titleStyles}>
+          <Typography variant="h6" sx={titleStyles} onClick={() => navigate("/")}>
             Turbo Trade
           </Typography>
 
