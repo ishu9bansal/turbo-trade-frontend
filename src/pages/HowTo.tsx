@@ -109,10 +109,8 @@ function StepperSection({ title, steps, IconElement, expanded, onChange }: Stepp
           {steps.map((step, stepIdx) => (
             <Step key={stepIdx} onClick={() => setActiveStep(stepIdx)}>
               <StepLabel onClick={() => setActiveStep(stepIdx)}>{step.title || ""}</StepLabel>
-              <StepContent>
-                  <Box sx={{ ml: 4, mt: 1 }}>
-                      <SimpleList items={step.items} />
-                  </Box>
+              <StepContent sx={{ pl: 0 }}>
+                  <SimpleList items={step.items} />
               </StepContent>
             </Step>
           ))}
@@ -142,9 +140,7 @@ function Section({ title, items, IconElement, expanded, onChange }: SectionProps
         </Box>
       </AccordionSummary>
       <AccordionDetails>
-        <Box sx={{ ml: 4, mt: 1 }}>
-            <SimpleList items={items} />
-        </Box>
+        <SimpleList items={items} />
       </AccordionDetails>
     </Accordion>
   );
@@ -153,7 +149,7 @@ function Section({ title, items, IconElement, expanded, onChange }: SectionProps
 /* Helper list component */
 function SimpleList({ items }: { items: string[] }) {
   return (
-    <List dense disablePadding>
+    <List sx={{ml: 2}} dense disablePadding>
       {items.map((item, idx) => (
         <ListItem key={idx} sx={{ pl: 1 }}>
           <ListItemText primary={item} />
