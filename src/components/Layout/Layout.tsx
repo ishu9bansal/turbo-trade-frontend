@@ -23,7 +23,6 @@ import {
   SignedIn,
   SignedOut,
   SignInButton,
-  SignUpButton,
   UserButton,
   useUser
 } from '@clerk/clerk-react';
@@ -140,11 +139,6 @@ export default function Layout({ children }: PropsWithChildren) {
                   Sign In
                 </Button>
               </SignInButton>
-              <SignUpButton mode="modal">
-                <Button sx={{ color: 'white' }}>
-                  Sign Up
-                </Button>
-              </SignUpButton>
             </SignedOut>
             <SignedIn>
               <UserButton appearance={userButtonStyle} />

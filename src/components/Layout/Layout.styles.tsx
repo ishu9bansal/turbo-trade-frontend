@@ -27,6 +27,7 @@ export const authBoxStyles: SxProps = {
     alignItems: "center",
     gap: 2,
     marginLeft: 2,
+    minWidth: 80,
 };
 
 export const userButtonStyle = {
