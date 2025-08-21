@@ -1,4 +1,10 @@
 import { BarChart3, Zap, CheckCircle2, MonitorSmartphone, TrendingUp } from "lucide-react";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import InsightsIcon from "@mui/icons-material/Insights";
+import LightbulbIcon from "@mui/icons-material/Lightbulb";
+import SettingsIcon from "@mui/icons-material/Settings";
+
 export const FEATURES = [
     {
         icon: MonitorSmartphone,
@@ -32,6 +38,7 @@ export const HOW_TO_USE_DATA = {
   sections: [
     {
       title: "1. Getting Started",
+      icon: CheckCircleOutlineIcon,
       steps: [
         {
           title: "Sign up & Log in",
@@ -52,6 +59,7 @@ export const HOW_TO_USE_DATA = {
     },
     {
       title: "2. Creating Your First Strategy",
+      icon: SettingsIcon,
       steps: [
         {
           title: "Go to “Create Strategy”",
@@ -82,6 +90,7 @@ export const HOW_TO_USE_DATA = {
     },
     {
       title: "3. Backtesting Your Strategy",
+      icon: InsightsIcon,
       steps: [
         {
           title: "Select a Date Range",
@@ -108,6 +117,7 @@ export const HOW_TO_USE_DATA = {
     },
     {
       title: "4. Deploying Live (Coming Soon)",
+      icon: RocketLaunchIcon,
       steps: [
         {
           title: null,
@@ -121,6 +131,7 @@ export const HOW_TO_USE_DATA = {
     },
     {
       title: "5. Advanced Features",
+      icon: SettingsIcon,
       steps: [
         {
           title: null,
@@ -134,6 +145,7 @@ export const HOW_TO_USE_DATA = {
     },
     {
       title: "6. Tips for Best Results",
+      icon: LightbulbIcon,
       steps: [
         {
           title: null,
