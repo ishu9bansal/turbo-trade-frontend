@@ -26,7 +26,7 @@ function HowToUse() {
   const [activeTip, setActiveTip] = useState(-1);
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
-      <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+      <Paper elevation={3} sx={{ py: 4, borderRadius: 3, px: { xs: 1, sm: 2, md: 4 }, mx: { xs: -2, sm: 0, md: 2 } }}>
         <Typography
           variant="h4"
           gutterBottom
@@ -54,7 +54,7 @@ function HowToUse() {
         </Link>
       </Paper>
       <br/>
-      <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+      <Paper elevation={3} sx={{ py: 4, borderRadius: 3, px: { xs: 1, sm: 2, md: 4 }, mx: { xs: -2, sm: 0, md: 2 } }}>
         <Typography
           variant="h4"
           gutterBottom
