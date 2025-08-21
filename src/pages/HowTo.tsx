@@ -47,6 +47,7 @@ function HowToUse() {
             />
         ))}
       </Paper>
+      <br/>
       <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
         <Typography
           variant="h4"
