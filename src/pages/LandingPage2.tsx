@@ -1,36 +1,21 @@
 import { motion } from "framer-motion";
 import { Button, Container, Grid, Card, CardContent, Typography, Box } from "@mui/material";
-import { BarChart3, Zap, CheckCircle2, MonitorSmartphone, TrendingUp } from "lucide-react";
+import { FEATURES } from "../types/landingPageData";
+import { useAuth, useClerk } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
-  const features = [
-    {
-      icon: MonitorSmartphone,
-      title: "Build Any Strategy",
-      desc: "From straddles to complex multi-leg setups — define your trades in minutes."
-    },
-    {
-      icon: BarChart3,
-      title: "Backtest Without Limits",
-      desc: "Run unlimited tests on historical data, compare variations, and find your edge."
-    },
-    {
-      icon: Zap,
-      title: "Deploy With Confidence",
-      desc: "Go live with the exact same strategy you tested — no mismatches, no guesswork."
-    },
-    {
-      icon: TrendingUp,
-      title: "No More Screen Fatigue",
-      desc: "Set your rules once and let automation handle the market’s every move."
-    },
-    {
-      icon: CheckCircle2,
-      title: "Rules You Define",
-      desc: "Custom entry & exit conditions, volatility checks, time limits, and more."
+  const features = FEATURES;
+  const { isSignedIn } = useAuth();
+  const { openSignUp } = useClerk();
+  const navigate = useNavigate();
+  const handleGetStarted = () => {
+    if (!isSignedIn) {
+      openSignUp();
+      return;
     }
-  ];
-//   return <span>Hello</span>
+    navigate("/backtest");
+  }
 
   return (
     <Box sx={{ bgcolor: "grey.50", color: "grey.900" }}>
@@ -79,6 +64,7 @@ export default function LandingPage() {
                 px: 3,
                 "&:hover": { bgcolor: "yellow.300" }
               }}
+              onClick={handleGetStarted}
             >
               Start Free Backtest →
             </Button>
@@ -173,6 +159,7 @@ export default function LandingPage() {
               px: 3,
               "&:hover": { bgcolor: "indigo.500" }
             }}
+            onClick={handleGetStarted}
           >
             Get Started — Trade Without the Stress →
           </Button>
