@@ -41,6 +41,7 @@ function HowToUse() {
             key={idx}
             title={section.title}
             steps={section.steps}
+            IconElement={section.icon}
             expanded={activeSection===idx} // Expand the first section by default
             onChange={() => setActiveSection(activeSection === idx ? -1 : idx)}
             />
@@ -57,17 +58,17 @@ interface SectionProps {
         items: string[];
     }[];
     expanded: boolean;
+    IconElement: React.ElementType;
     onChange: () => void;
 }
 
-function Section({ title, steps, expanded, onChange }: SectionProps) {
+function Section({ title, steps, IconElement, expanded, onChange }: SectionProps) {
   const [activeStep, setActiveStep] = useState(0);
   return (
     <Accordion expanded={expanded} onChange={onChange}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Box display="flex" alignItems="center" gap={1}>
-          {/* {section.icon({ color: "primary" })} */}
-          <RocketLaunchIcon color="primary" />
+          <IconElement color="primary" />
           <Typography variant="h6" fontWeight="bold">
             {title}
           </Typography>
