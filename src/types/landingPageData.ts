@@ -37,7 +37,7 @@ export const HOW_TO_USE_DATA = {
   title: "How to Use the Platform",
   sections: [
     {
-      title: "1. Getting Started",
+      title: "Getting Started",
       icon: CheckCircleOutlineIcon,
       steps: [
         {
@@ -58,7 +58,7 @@ export const HOW_TO_USE_DATA = {
       ],
     },
     {
-      title: "2. Creating Your First Strategy",
+      title: "Creating Your First Strategy",
       icon: SettingsIcon,
       steps: [
         {
@@ -89,7 +89,7 @@ export const HOW_TO_USE_DATA = {
       ],
     },
     {
-      title: "3. Backtesting Your Strategy",
+      title: "Backtesting Your Strategy",
       icon: InsightsIcon,
       steps: [
         {
@@ -116,45 +116,45 @@ export const HOW_TO_USE_DATA = {
       ],
     },
     {
-      title: "4. Deploying Live (Coming Soon)",
+      title: "Deploying Live (Coming Soon)",
       icon: RocketLaunchIcon,
       steps: [
         {
-          title: null,
-          items: [
-            "Select a Strategy from Your Account",
-            "Connect Your Broker (support launching soon)",
-            "Deploy with One Click — strategy runs live exactly as tested.",
-          ],
+          title: "Select a Strategy from Your Account",
+          items: [],
+        },
+        {
+          title: "Connect Your Broker (support launching soon)",
+          items: [],
+        },
+        {
+          title: "Deploy with One Click — strategy runs live exactly as tested.",
+          items: [],
         },
       ],
     },
+  ],
+};
+
+export const TIPS_AND_TRICKS = {
+  title: "Tips & Tricks",
+  sections: [
     {
-      title: "5. Advanced Features",
+      title: "Advanced Features",
       icon: SettingsIcon,
-      steps: [
-        {
-          title: null,
-          items: [
-            "Custom Data Sources (coming soon): Upload your own market data.",
-            "Unlimited Backtests: No restrictions on runs for last 2 years of data.",
-            "Scalable Instruments: New instruments added as data becomes available.",
-          ],
-        },
+      items: [
+        "Custom Data Sources (coming soon): Upload your own market data.",
+        "Unlimited Backtests: No restrictions on runs for last 2 years of data.",
+        "Scalable Instruments: New instruments added as data becomes available.",
       ],
     },
     {
-      title: "6. Tips for Best Results",
+      title: "Tips for Best Results",
       icon: LightbulbIcon,
-      steps: [
-        {
-          title: null,
-          items: [
-            "Always run multiple variations to optimize parameters.",
-            "Save a 'base' version of your strategy for quick reversion.",
-            "Use backtest history to monitor long-term consistency.",
-          ],
-        },
+      items: [
+        "Always run multiple variations to optimize parameters.",
+        "Save a 'base' version of your strategy for quick reversion.",
+        "Use backtest history to monitor long-term consistency.",
       ],
     },
   ],

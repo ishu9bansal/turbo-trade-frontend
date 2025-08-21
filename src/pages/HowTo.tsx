@@ -14,15 +14,15 @@ import {
   StepLabel,
   StepContent,
 } from "@mui/material";
-import { HOW_TO_USE_DATA } from "../types/landingPageData";
+import { HOW_TO_USE_DATA, TIPS_AND_TRICKS } from "../types/landingPageData";
 import ContainerLayout from "../components/Layout/ContainerLayout";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useState } from "react";
 
 function HowToUse() {
-  const [activeSection, setActiveSection] = useState(0);
+  const [activeSection, setActiveSection] = useState(0); // Expand the first section by default
+  const [activeTip, setActiveTip] = useState(-1);
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
       <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
@@ -37,13 +37,35 @@ function HowToUse() {
         </Typography>
 
         {HOW_TO_USE_DATA.sections.map((section, idx) => (
-          <Section
+          <StepperSection
             key={idx}
             title={section.title}
             steps={section.steps}
             IconElement={section.icon}
-            expanded={activeSection===idx} // Expand the first section by default
+            expanded={activeSection===idx}
             onChange={() => setActiveSection(activeSection === idx ? -1 : idx)}
+            />
+        ))}
+      </Paper>
+      <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          fontWeight="bold"
+          align="center"
+          sx={{ mb: 4 }}
+        >
+          {TIPS_AND_TRICKS.title}
+        </Typography>
+
+        {TIPS_AND_TRICKS.sections.map((section, idx) => (
+          <Section
+            key={idx}
+            title={section.title}
+            items={section.items}
+            IconElement={section.icon}
+            expanded={activeTip===idx}
+            onChange={() => setActiveTip(activeTip === idx ? -1 : idx)}
             />
         ))}
       </Paper>
@@ -51,10 +73,10 @@ function HowToUse() {
   );
 }
 
-interface SectionProps {
+interface StepperSectionProps {
     title: string;
     steps: {
-        title: string | null;
+        title: string;
         items: string[];
     }[];
     expanded: boolean;
@@ -62,7 +84,7 @@ interface SectionProps {
     onChange: () => void;
 }
 
-function Section({ title, steps, IconElement, expanded, onChange }: SectionProps) {
+function StepperSection({ title, steps, IconElement, expanded, onChange }: StepperSectionProps) {
   const [activeStep, setActiveStep] = useState(0);
   return (
     <Accordion expanded={expanded} onChange={onChange}>
@@ -88,6 +110,34 @@ function Section({ title, steps, IconElement, expanded, onChange }: SectionProps
             </Step>
           ))}
         </Stepper>
+      </AccordionDetails>
+    </Accordion>
+  );
+}
+
+interface SectionProps {
+    title: string;
+    expanded: boolean;
+    IconElement: React.ElementType;
+    onChange: () => void;
+    items: string[];
+}
+
+function Section({ title, items, IconElement, expanded, onChange }: SectionProps) {
+  return (
+    <Accordion expanded={expanded} onChange={onChange}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Box display="flex" alignItems="center" gap={1}>
+          <IconElement color="primary" />
+          <Typography variant="h6" fontWeight="bold">
+            {title}
+          </Typography>
+        </Box>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Box sx={{ ml: 4, mt: 1 }}>
+            <SimpleList items={items} />
+        </Box>
       </AccordionDetails>
     </Accordion>
   );
