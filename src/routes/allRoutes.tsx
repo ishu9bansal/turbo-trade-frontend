@@ -3,6 +3,7 @@ import ContractScatterPlot from "../pages/PlotPage";
 import HistoryViewer from "../pages/HistoryPage";
 import LandingPage from "../pages/LandingPage2";
 import HowTo from "../pages/HowTo";
+import Guide from "../pages/Guide";
 
 const allRoutes = [
   {
@@ -15,6 +16,13 @@ const allRoutes = [
     path: "/how-to",
     element: <HowTo />,
     label: "How to Use",
+    public: true
+  },
+  {
+    path: "/guide",
+    element: <Guide />,
+    label: "Guide",
+    hideTab: true,
     public: true
   },
   {

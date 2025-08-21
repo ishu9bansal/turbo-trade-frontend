@@ -50,7 +50,8 @@ export default function Layout({ children }: PropsWithChildren) {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const currentRoutes = isSignedIn ? allRoutes : allRoutes.filter(route => route.public);
+  const visibleRoutes = allRoutes.filter(route => !route.hideTab);
+  const currentRoutes = isSignedIn ? visibleRoutes : visibleRoutes.filter(route => route.public);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     navigate(newValue);

@@ -19,6 +19,7 @@ import ContainerLayout from "../components/Layout/ContainerLayout";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function HowToUse() {
   const [activeSection, setActiveSection] = useState(0); // Expand the first section by default
@@ -46,6 +47,11 @@ function HowToUse() {
             onChange={() => setActiveSection(activeSection === idx ? -1 : idx)}
             />
         ))}
+        <Link to="/guide" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Typography variant="body1" color="primary" sx={{ mt: 4 }}>
+            View detailed guide to position philosophy
+          </Typography>
+        </Link>
       </Paper>
       <br/>
       <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>

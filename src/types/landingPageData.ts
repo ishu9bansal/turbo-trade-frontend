@@ -159,3 +159,110 @@ export const TIPS_AND_TRICKS = {
     },
   ],
 };
+
+export const GUIDE = {
+  title: "Position Philosophy in Options Trading",
+  sections: [
+    {
+      title: "1. Core Philosophy of a Position",
+      steps: [
+        {
+          title: "At any given moment, there exists an **ideal position** in the market — one that is determined relative to the *current strike* of the underlying asset. This ideal position serves as the foundation of your strategy.",
+          items: [],
+        },
+      ],
+    },
+    {
+      title: "2. Intraday Strategy Approach",
+      steps: [
+        {
+          title: " - Typically, in an intraday strategy, you enter a position and hold it until the end of the trading day.",
+          items: [],
+        },
+        {
+          title: " - The primary objective is to **capture and eat the premium** as the position is exited by the market close.",
+          items: [],
+        },
+      ],
+    },
+    {
+      title: "3. When the Market Moves",
+      steps: [
+        {
+          title: "- The market is dynamic. If it moves significantly, your \"ideal\" position can drift far from your current holdings.",
+          items: [],
+        },
+        {
+          title: "- In such cases, it may be more profitable to **readjust your position** to align with the updated ideal position.",
+          items: [],
+        },
+      ],
+    },
+    {
+      title: "4. Readjustment = Exit + Entry",
+      steps: [
+        {
+          title: "Readjustment can be visualized as:",
+          items: [
+            "Exiting your current position.",
+            "Entering a new position that matches the updated ideal.",
+          ],
+        },
+        {
+          title: "This process can occur multiple times intraday depending on your conditions.",
+          items: [],
+        },
+      ],
+    },
+    {
+      title: "5. Defining Entry & Exit Conditions",
+      steps: [
+        {
+          title: "Entry and exit triggers are fully customizable:",
+          items: [
+            "Market signals (e.g., trend reversals, momentum indicators)",
+            "Stop-loss or profit targets",
+            "Volatility checks",
+            "Fixed time intervals",
+            "Position shift limits (e.g., max 5 shifts/day)",
+          ],
+        },
+        {
+          title: "These rules define your unique variant of the base strategy.",
+          items: [],
+        },
+      ],
+    },
+    {
+      title: "6. Automation of Your Style",
+      steps: [
+        {
+          title: "By setting your own rules, the system can execute your strategy automatically.",
+          items: [],
+        },
+        {
+          title: "This ensures:",
+          items: [
+            "no emotional decision-making",
+            "precise alignment with your tested strategy",
+            "consistency in execution",
+          ],
+        },
+      ],
+    },
+    {
+      title: "7. Key Benefits of the Position Philosophy",
+      steps: [
+        {
+          title: "Flexibility, Customization, Scalability, Confidence",
+          items: [
+            "Flexibility to adapt to changing market conditions in real-time.",
+            "Customization to fine-tune to your risk appetite.",
+            "Scalability across Nifty, BankNifty, FinNifty, and future instruments.",
+            "Confidence knowing the same strategy is used for backtesting and live execution — no mismatch."
+          ],
+        },
+      ],
+    },
+  ],
+};
