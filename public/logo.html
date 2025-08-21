@@ -1,0 +1,84 @@
+<!--
+Turbo Trade — SVG Logo Pack
+Contents:
+1) Horizontal logo (icon + wordmark)
+2) Icon-only (square)
+3) Monochrome fallback (inherits currentColor)
+
+Edit tips:
+- Change the CSS variables (--tt-primary, --tt-accent, --tt-dark) to recolor.
+- Set width/height on the <svg> elements as needed (they scale infinitely).
+- For dark backgrounds, use the .on-dark variant.
+-->
+
+<!-- 1) Horizontal Logo -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" width="520" height="120" aria-label="Turbo Trade logo" role="img">
+  <defs>
+    <linearGradient id="ttGradient" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#00D4FF"/>
+      <stop offset="100%" stop-color="#0066FF"/>
+    </linearGradient>
+    <style>
+      :root { --tt-primary: #0B1220; --tt-accent: url(#ttGradient); --tt-dark:#121212; }
+      .mark-bg { fill: none; }
+      .mark-ring { fill: none; stroke-width: 10; stroke-linecap: round; }
+      .mark-core { fill: none; stroke-width: 12; stroke-linecap: round; }
+      .bolt { fill: #12E28C; }
+      .type { font: 700 56px/1.1 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; letter-spacing: 0.5px; }
+      .type-sub { font: 600 18px/1 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+      .on-dark .type { fill: #FFFFFF; }
+      .on-dark .type-sub { fill: #B6C2FF; }
+    </style>
+  </defs>
+
+  <!-- Icon (Turbo + Trade arrow/bolt) -->
+  <g transform="translate(20,20)">
+    <!-- Outer speed ring -->
+    <circle cx="40" cy="40" r="40" class="mark-bg"/>
+    <path class="mark-ring" stroke="url(#ttGradient)" d="M13 55a35 35 0 1 0 54-31"/>
+    <!-- Inner turbine swirl (3 blades) -->
+    <path class="mark-core" stroke="#1F7AFF" d="M40 20c8 0 12 8 8 14-4 7-14 5-14 14 0 6 5 10 10 10"/>
+    <path class="mark-core" stroke="#00C2FF" d="M24 34c7-4 15 0 16 7 2 8-7 12-4 20 2 6 9 7 14 5"/>
+    <path class="mark-core" stroke="#4DE3FF" d="M56 34c-7-4-15 0-16 7-2 8 7 12 4 20-2 6-9 7-14 5"/>
+    <!-- Up-right bolt/arrow forming subtle double-T -->
+    <path class="bolt" d="M45 9l-9 18h10l-6 22 24-28h-12l6-12z"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g transform="translate(130,78)">
+    <text class="type" x="0" y="0" fill="var(--tt-primary)">Turbo <tspan fill="#1F7AFF">Trade</tspan></text>
+    <text class="type-sub" x="2" y="30" fill="#5B6C8F">Fast. Focused. Profitable.</text>
+  </g>
+</svg>
+
+
+<!-- 2) Icon-only (square, safe at 64×64) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" aria-label="Turbo Trade icon">
+  <defs>
+    <linearGradient id="ttGradient2" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#00D4FF"/>
+      <stop offset="100%" stop-color="#0066FF"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="47" fill="#0B1220"/>
+  <path stroke="url(#ttGradient2)" stroke-width="8" stroke-linecap="round" fill="none" d="M22 63a28 28 0 1 0 43-25"/>
+  <path stroke="#4DE3FF" stroke-width="9" stroke-linecap="round" fill="none" d="M50 30c6 0 9 6 6 10-3 5-11 4-11 11 0 5 4 8 9 8"/>
+  <path fill="#12E28C" d="M56 17l-8 15h9l-5 18 19-23h-10l5-10z"/>
+</svg>
+
+
+<!-- 3) Monochrome wordmark (inherits currentColor) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" width="520" height="120" aria-label="Turbo Trade logo (mono)" style="color:#111">
+  <g transform="translate(20,20)" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round">
+    <circle cx="40" cy="40" r="40" opacity="0"/>
+    <path d="M13 55a35 35 0 1 0 54-31"/>
+    <path d="M40 20c8 0 12 8 8 14-4 7-14 5-14 14 0 6 5 10 10 10" stroke-width="12"/>
+    <path d="M24 34c7-4 15 0 16 7 2 8-7 12-4 20 2 6 9 7 14 5" stroke-width="12" opacity="0.8"/>
+    <path d="M56 34c-7-4-15 0-16 7-2 8 7 12 4 20-2 6-9 7-14 5" stroke-width="12" opacity="0.6"/>
+    <path d="M45 9l-9 18h10l-6 22 24-28h-12l6-12z" fill="currentColor" stroke="none"/>
+  </g>
+  <g transform="translate(130,78)" fill="currentColor">
+    <text style="font: 700 56px/1.1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; letter-spacing:0.5px">Turbo Trade</text>
+    <text x="2" y="30" style="font:600 18px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; letter-spacing:2px; text-transform:uppercase; opacity:0.8">Fast. Focused. Profitable.</text>
+  </g>
+</svg>
