@@ -2,12 +2,19 @@ import BacktestForm from "../pages/InputPage";
 import ContractScatterPlot from "../pages/PlotPage";
 import HistoryViewer from "../pages/HistoryPage";
 import LandingPage from "../pages/LandingPage2";
+import HowTo from "../pages/HowTo";
 
 const allRoutes = [
   {
     path: "/",
     element: <LandingPage />,
     label: "Home",
+    public: true
+  },
+  {
+    path: "/how-to",
+    element: <HowTo />,
+    label: "How to Use",
     public: true
   },
   {
