@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Turbo Trade — Backtest & Automate Options Strategies</title>
+  <style>
+    /* Simple modern layout, responsive */
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --accent:#00c2a8;
+      --muted:#9aa7b2;
+      --glass: rgba(255,255,255,0.03);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071021 0%, #071827 100%);color:#e6eef3}
+    .container{max-width:1100px;margin:0 auto;padding:36px}
+    header{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+    .logo{display:flex;gap:12px;align-items:center}
+    .logo .mark{width:42px;height:42px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#0078ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:#04202b}
+    nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-size:15px}
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;margin-top:28px}
+    .hero .eyebrow{color:var(--accent);font-weight:600;font-size:13px}
+    .hero h1{font-size:36px;margin:12px 0 8px;line-height:1.05}
+    .hero p{color:var(--muted);margin:0 0 18px}
+    .cta-row{display:flex;gap:12px}
+    .btn{padding:12px 16px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+    .btn-primary{background:var(--accent);color:#04202b}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .product-card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(3,7,18,0.6)}
+    .mini-stats{display:flex;gap:12px;margin-top:14px}
+    .stat{flex:1;padding:10px;border-radius:8px;background:var(--glass);text-align:center}
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+    .feature{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:18px;border-radius:12px}
+    .how{display:flex;gap:14px;margin-top:36px;align-items:flex-start}
+    .how-step{background:var(--card);padding:16px;border-radius:10px;flex:1}
+    .roadmap{margin-top:36px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:18px;border-radius:12px}
+    footer{margin-top:48px;padding:24px 0;color:var(--muted);font-size:14px;border-top:1px solid rgba(255,255,255,0.03)}
+    /* responsive */
+    @media (max-width:960px){
+      .hero{grid-template-columns:1fr; }
+      .features{grid-template-columns:1fr}
+    }
+    code{background:rgba(255,255,255,0.02);padding:3px 6px;border-radius:6px;color:#bfece0}
+    .form-inline{display:flex;gap:8px;margin-top:12px}
+    .input{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;flex:1}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <div class="mark">TT</div>
+        <div>
+          <div style="font-weight:700">Turbo Trade</div>
+          <div style="font-size:12px;color:var(--muted)">Backtest • Refine • Deploy</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#demo">Demo</a>
+        <a href="#founders">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Designed for options traders</div>
+        <h1>Backtest intraday index options with minute-level precision — iterate faster, trade smarter.</h1>
+        <p>Form-first strategy builder today. Block & code power and live broker integrations (Zerodha) planned next. Run minute-level backtests, track versioned strategies, and prepare for safe deployment. :contentReference[oaicite:9]{index=9}</p>
+
+        <div class="cta-row">
+          <button class="btn btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Get early access</button>
+          <button class="btn btn-ghost" onclick="alert('Message sent to founders (placeholder)')">Request demo</button>
+        </div>
+
+        <div class="mini-stats" aria-hidden="true">
+          <div class="stat">
+            <div style="font-size:18px;font-weight:700">2 yrs</div>
+            <div style="font-size:13px;color:var(--muted)">minute-level history</div>
+          </div>
+          <div class="stat">
+            <div style="font-size:18px;font-weight:700">Multi-leg</div>
+            <div style="font-size:13px;color:var(--muted)">straddle, condor, more</div>
+          </div>
+          <div class="stat">
+            <div style="font-size:18px;font-weight:700">Versioned</div>
+            <div style="font-size:13px;color:var(--muted)">strategy history</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:700">Live backtest preview</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:6px">Quick snapshot of recent run — PnL, trades, drawdown</div>
+          </div>
+          <div style="font-size:12px;color:var(--muted)">v0.1</div>
+        </div>
+
+        <!-- placeholder chart and table -->
+        <div style="margin-top:14px;height:180px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center;color:var(--muted)">
+          Chart / PnL preview (placeholder)
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <div style="flex:1;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px">
+            <div style="font-weight:700">Total PnL</div>
+            <div style="color:var(--muted)">₹ 12,430</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px">
+            <div style="font-weight:700">Max DD</div>
+            <div style="color:var(--muted)">-6.2%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- features -->
+    <section id="features" class="features" aria-label="core features">
+      <div class="feature">
+        <h3>Strategy Builder</h3>
+        <p style="color:var(--muted);font-size:14px">Form-based inputs for quick strategy creation. Add legs, select strike rules, set stop-loss/profit targets — with templates for common strategies. :contentReference[oaicite:10]{index=10}</p>
+      </div>
+      <div class="feature">
+        <h3>Backtest Engine</h3>
+        <p style="color:var(--muted);font-size:14px">Python core engine that runs minute-level historical simulations and exports structured <code>BacktestResult</code> objects for analysis. Designed to be modular and decoupled from persistence. :contentReference[oaicite:11]{index=11}</p>
+      </div>
+      <div class="feature">
+        <h3>Analytics & Versioning</h3>
+        <p style="color:var(--muted);font-size:14px">Summary metrics, per-trade logs, and versioned strategies so you can iterate safely and reproduce results. :contentReference[oaicite:12]{index=12}</p>
+      </div>
+    </section>
+
+    <!-- how it works -->
+    <section class="how" aria-label="how it works">
+      <div class="how-step">
+        <h4>1 • Define</h4>
+        <p style="color:var(--muted)">Pick a template or build custom multi-leg positions. Configure entry/exit, strike rules and adjustment criteria.</p>
+      </div>
+      <div class="how-step">
+        <h4>2 • Backtest</h4>
+        <p style="color:var(--muted)">Run minute-level backtests across 2 years of data, review PnL, trades, and drawdown.</p>
+      </div>
+      <div class="how-step">
+        <h4>3 • Deploy (coming)</h4>
+        <p style="color:var(--muted)">Connect to broker APIs for paper or live trading—monitor via the dashboard (Phase 2 roadmap). :contentReference[oaicite:13]{index=13}</p>
+      </div>
+    </section>
+
+    <!-- roadmap -->
+    <section id="roadmap" class="roadmap">
+      <h3 style="margin:0 0 8px">Roadmap</h3>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:220px;background:rgba(0,0,0,0.2);padding:12px;border-radius:10px">
+          <strong>Phase 1 (current)</strong>
+          <div style="color:var(--muted);font-size:13px;margin-top:6px">Form-based strategy input, backtests, analytics, version history. :contentReference[oaicite:14]{index=14}</div>
+        </div>
+        <div style="flex:1;min-width:220px;background:rgba(0,0,0,0.2);padding:12px;border-radius:10px">
+          <strong>Phase 2 (next)</strong>
+          <div style="color:var(--muted);font-size:13px;margin-top:6px">Broker integrations (Zerodha), live execution, paper trading, monitoring and alerts. :contentReference[oaicite:15]{index=15}</div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;color:var(--muted);font-size:13px">
+        Note: Engine design emphasizes modularity — results are returned as structured objects and persistence is handled outside the core to preserve reusability. :contentReference[oaicite:16]{index=16}
+      </div>
+    </section>
+
+    <!-- demo / signup -->
+    <section id="demo" style="margin-top:28px;padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border-radius:12px">
+      <h3 style="margin:0 0 8px">Get early access & demo</h3>
+      <p style="color:var(--muted);margin:0 0 12px">Join the waitlist for early builds and demo slots. We'll share updates and invite traders for closed beta testing.</p>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <input class="input" placeholder="Your email" id="email" />
+        <button class="btn btn-primary" onclick="signup()">Join waitlist</button>
+        <button class="btn btn-ghost" onclick="alert('Demo request submitted (placeholder)')">Request demo</button>
+      </div>
+      <div id="msg" style="color:var(--muted);margin-top:10px;font-size:13px"></div>
+    </section>
+
+    <footer id="founders">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px">
+        <div>
+          <strong>Founders</strong>
+          <div style="margin-top:8px;color:var(--muted)">
+            Ishu Bansal — <a href="mailto:ishubansal1400@gmail.com" style="color:var(--muted)">ishubansal1400@gmail.com</a><br>
+            Prabhutosh Kumar — <a href="mailto:prabhutosh440iitv@gmail.com" style="color:var(--muted)">prabhutosh440iitv@gmail.com</a>
+          </div>
+        </div>
+        <div style="color:var(--muted);font-size:13px">
+          <div>Turbo Trade • Focus: Intraday index options (NIFTY, BANKNIFTY)</div>
+          <div style="margin-top:6px">© Turbo Trade — Built for traders, engineered for scale.</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function signup(){
+      const email = document.getElementById('email').value.trim();
+      if(!email){ document.getElementById('msg').textContent = 'Please enter your email.'; return; }
+      // placeholder: integrate with your API / mailing list
+      document.getElementById('msg').textContent = 'Thanks — we added you to the waitlist (placeholder).';
+      console.log('Waitlist signup (placeholder):', email);
+    }
+  </script>
+</body>
+</html>
