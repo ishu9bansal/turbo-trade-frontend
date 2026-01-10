@@ -14,18 +14,35 @@ TagManager.initialize({
 
 const theme = createTheme();
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
+// Check if we have a valid Clerk key (starts with pk_live or pk_test with proper format)
+const hasValidClerkKey = PUBLISHABLE_KEY && (
+  PUBLISHABLE_KEY.startsWith('pk_live_') || 
+  (PUBLISHABLE_KEY.startsWith('pk_test_') && PUBLISHABLE_KEY.length > 20)
+);
+
+const AppWrapper = ({ children }: { children: React.ReactNode }) => {
+  if (hasValidClerkKey) {
+    return (
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl='/'>
+        {children}
+      </ClerkProvider>
+    );
+  }
+  // Without a valid Clerk key, protected routes won't work but public routes will
+  return <>{children}</>;
+};
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl='/'>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <App />
-          </ThemeProvider>
-      </ClerkProvider>
+      <AppWrapper>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </AppWrapper>
     </Provider>
   </React.StrictMode>
 );

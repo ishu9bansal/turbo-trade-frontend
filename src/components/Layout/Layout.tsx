@@ -44,11 +44,29 @@ export default function Layout({ children }: PropsWithChildren) {
   const [defaultFormData, setDefaultFormData] = useState<BacktestFormData>(DEFAULT_FORM_DATA);
   const location = useLocation();
   const navigate = useNavigate();
-  const { isSignedIn } = useUser();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
   const [drawerOpen, setDrawerOpen] = useState(false);
+  
+  // Check if Clerk is available by checking for valid publishable key
+  const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+  const clerkAvailable = PUBLISHABLE_KEY && (
+    PUBLISHABLE_KEY.startsWith('pk_live_') || 
+    (PUBLISHABLE_KEY.startsWith('pk_test_') && PUBLISHABLE_KEY.length > 20)
+  );
+  
+  // Try to get Clerk user if available
+  let isSignedIn = false;
+  if (clerkAvailable) {
+    try {
+      const user = useUser();
+      isSignedIn = user.isSignedIn || false;
+    } catch (error) {
+      // Clerk not properly initialized
+      console.warn('Clerk error:', error);
+    }
+  }
+
   const visibleRoutes = allRoutes.filter(route => !route.hideTab);
   const currentRoutes = isSignedIn ? visibleRoutes : visibleRoutes.filter(route => route.public);
 
@@ -66,13 +84,35 @@ export default function Layout({ children }: PropsWithChildren) {
       const defaultValues = await getConfig();
       setDefaultFormData(defaultValues);
     } catch (err: any) {
-      alert(err.message);
+      // Config not available, use defaults
+      console.warn('Failed to load config:', err);
     }
   };
 
   useEffect(() => {
     onInit();
   }, []);
+
+  // Component to render auth buttons (handles Clerk not being available)
+  const AuthButtons = () => {
+    if (!clerkAvailable) {
+      return null;
+    }
+    return (
+      <>
+        <SignedOut>
+          <SignInButton mode="modal">
+            <Button sx={{ color: 'white' }}>
+              Sign In
+            </Button>
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+          <UserButton appearance={userButtonStyle} />
+        </SignedIn>
+      </>
+    );
+  };
 
   return (
     <FormProvider value={defaultFormData}>
@@ -133,16 +173,7 @@ export default function Layout({ children }: PropsWithChildren) {
           )}
 
           <Box sx={authBoxStyles}>
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button sx={{ color: 'white' }}>
-                  Sign In
-                </Button>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton appearance={userButtonStyle} />
-            </SignedIn>
+            <AuthButtons />
           </Box>
         </Toolbar>
       </AppBar>
