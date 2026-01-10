@@ -98,7 +98,7 @@ const StraddleVisualization: React.FC = () => {
   }));
 
   // Custom tooltip
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{name: string; value: number; color: string; payload?: {time: string}}>}) => {
     if (active && payload && payload.length) {
       return (
         <Paper
@@ -111,7 +111,7 @@ const StraddleVisualization: React.FC = () => {
           <Typography variant="body2" sx={{ color: '#fff', marginBottom: 1 }}>
             Time: {payload[0]?.payload?.time}
           </Typography>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry, index: number) => (
             <Typography
               key={index}
               variant="body2"
