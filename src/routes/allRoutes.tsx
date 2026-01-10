@@ -4,6 +4,7 @@ import HistoryViewer from "../pages/HistoryPage";
 import LandingPage from "../pages/LandingPage2";
 import HowTo from "../pages/HowTo";
 import Guide from "../pages/Guide";
+import StraddleVisualization from "../pages/StraddleVisualization";
 
 const allRoutes = [
   {
@@ -23,6 +24,12 @@ const allRoutes = [
     element: <Guide />,
     label: "Guide",
     hideTab: true,
+    public: true
+  },
+  {
+    path: "/straddle-visualization",
+    element: <StraddleVisualization />,
+    label: "Straddle Monitor",
     public: true
   },
   {
