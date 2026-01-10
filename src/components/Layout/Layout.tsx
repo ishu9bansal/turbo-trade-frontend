@@ -5,7 +5,6 @@ import {
   Tabs,
   Tab,
   Box,
-  Button,
   IconButton,
   Drawer,
   List,
@@ -19,13 +18,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useEffect, useState } from "react";
 import { type PropsWithChildren } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-  useUser
-} from '@clerk/clerk-react';
 import allRoutes from "../../routes/allRoutes";
 import {
   appBarStyles,
@@ -33,7 +25,6 @@ import {
   titleStyles,
   tabsStyles,
   authBoxStyles,
-  userButtonStyle
 } from "./Layout.styles";
 import { FormProvider } from "../../context/context";
 import { getConfig } from "../../api/backtest";
@@ -44,13 +35,12 @@ export default function Layout({ children }: PropsWithChildren) {
   const [defaultFormData, setDefaultFormData] = useState<BacktestFormData>(DEFAULT_FORM_DATA);
   const location = useLocation();
   const navigate = useNavigate();
-  const { isSignedIn } = useUser();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
   const [drawerOpen, setDrawerOpen] = useState(false);
+
   const visibleRoutes = allRoutes.filter(route => !route.hideTab);
-  const currentRoutes = isSignedIn ? visibleRoutes : visibleRoutes.filter(route => route.public);
+  const currentRoutes = visibleRoutes.filter(route => route.public);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     navigate(newValue);
@@ -65,8 +55,9 @@ export default function Layout({ children }: PropsWithChildren) {
     try {
       const defaultValues = await getConfig();
       setDefaultFormData(defaultValues);
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err) {
+      // Config not available, use defaults
+      console.warn('Failed to load config:', err);
     }
   };
 
@@ -133,16 +124,13 @@ export default function Layout({ children }: PropsWithChildren) {
           )}
 
           <Box sx={authBoxStyles}>
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button sx={{ color: 'white' }}>
-                  Sign In
-                </Button>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton appearance={userButtonStyle} />
-            </SignedIn>
+            {/* Clerk authentication - requires valid VITE_CLERK_PUBLISHABLE_KEY */}
+            {/* {clerkAvailable && (
+              <ClerkErrorBoundary>
+                <ClerkUserInfo onUserStateChange={setIsSignedIn} />
+                <ClerkAuthButtons />
+              </ClerkErrorBoundary>
+            )} */}
           </Box>
         </Toolbar>
       </AppBar>
