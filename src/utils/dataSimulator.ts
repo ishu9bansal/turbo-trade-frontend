@@ -119,6 +119,11 @@ export class StraddleDataSimulator {
     return data;
   }
 
+  generateFullDayData(): PremiumSnapshot[] {
+    const totalPoints = (6.25 * 60 * 60) / 5; // Total points in a trading day (5 sec intervals)
+    return this.generateInitialData(totalPoints);
+  }
+
   /**
    * Reset the simulator
    */
