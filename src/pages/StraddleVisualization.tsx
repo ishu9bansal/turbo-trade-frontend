@@ -18,8 +18,21 @@ import { Box, Button, Typography, Paper } from '@mui/material';
 import type { PremiumSnapshot } from '../types/straddle';
 
 const XAXIS_TICK_INTERVAL = 15 * 60; // 30 minutes in seconds
-const TOTAL_SIMULATION_DURATION = 6 * 60 * 60; // 3 hours in seconds
+const TOTAL_SIMULATION_DURATION = 6 * 60 * 60; // 6 hours in seconds
 const MARKET_OPEN_TIME = 9.5 * 60 * 60; // 9:30 AM in seconds
+const tickValueGenerator = (index: number) => {
+    //  HH:MM:SS format
+    const secondsFromMarketOpen = 5*index;
+    const totalSeconds = MARKET_OPEN_TIME + secondsFromMarketOpen;
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    return `${hours.toString()
+        .padStart(2, '0')}:${minutes.toString()
+        .padStart(2, '0')}:${seconds.toString()
+        .padStart(2, '0')}`;
+}
+const EMPTY_DATA = Array.from({ length: TOTAL_SIMULATION_DURATION / 5 }, (_, i) => ({ time: tickValueGenerator(i) }));
 
 const StraddleVisualization: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -100,7 +113,7 @@ const StraddleVisualization: React.FC = () => {
     'Strike +1': snapshot.premiums['1'],
     'Strike +2': snapshot.premiums['2'],
     'Strike +3': snapshot.premiums['3'],
-  }));
+  })).concat(EMPTY_DATA.slice(data.length)); // Fill remaining with empty data
 
   // Custom tooltip
   const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{name: string; value: number; color: string; payload?: {time: string}}>}) => {
