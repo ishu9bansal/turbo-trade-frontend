@@ -4,7 +4,7 @@ import type { PremiumSnapshot } from '../types/straddle';
  * Generate realistic intraday straddle premium data
  * This simulates the behavior of option premiums throughout the trading day
  */
-export class StraddleDataSimulator {
+export class StraddleDataGenerator {
   private baseSpotPrice: number;
   private currentTime: Date;
   private marketOpenTime: Date;
