@@ -103,17 +103,20 @@ const StraddleVisualization: React.FC = () => {
   }, []);
 
   // Transform data for Recharts
-  const chartData = data.map((snapshot: PremiumSnapshot) => ({
-    time: snapshot.timestamp,
-    spotPrice: snapshot.spotPrice,
-    'Strike -3': snapshot.premiums['-3'],
-    'Strike -2': snapshot.premiums['-2'],
-    'Strike -1': snapshot.premiums['-1'],
-    'Strike 0 (ATM)': snapshot.premiums['0'],
-    'Strike +1': snapshot.premiums['1'],
-    'Strike +2': snapshot.premiums['2'],
-    'Strike +3': snapshot.premiums['3'],
-  })).concat(EMPTY_DATA.slice(data.length)); // Fill remaining with empty data
+  const chartData = [
+    ...data.map((snapshot: PremiumSnapshot) => ({
+      time: snapshot.timestamp,
+      spotPrice: snapshot.spotPrice,
+      'Strike -3': snapshot.premiums['-3'],
+      'Strike -2': snapshot.premiums['-2'],
+      'Strike -1': snapshot.premiums['-1'],
+      'Strike 0 (ATM)': snapshot.premiums['0'],
+      'Strike +1': snapshot.premiums['1'],
+      'Strike +2': snapshot.premiums['2'],
+      'Strike +3': snapshot.premiums['3'],
+    })),
+    ...EMPTY_DATA.slice(data.length),
+  ]
 
   // Custom tooltip
   const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{name: string; value: number; color: string; payload?: {time: string}}>}) => {
