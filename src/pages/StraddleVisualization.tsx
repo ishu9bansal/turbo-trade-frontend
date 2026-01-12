@@ -12,7 +12,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setData, addSnapshot, setSimulating } from '../store/straddleSlice';
 import { loadStraddleData, saveStraddleData, clearStraddleData } from '../utils/localStorage';
-import { StraddleDataSimulator } from '../utils/dataSimulator';
+import { StraddleDataSimulator } from '../utils/apiServiceSimulator';
 import ContainerLayout from '../components/Layout/ContainerLayout';
 import { Box, Button, Typography, Paper } from '@mui/material';
 import type { PremiumSnapshot } from '../types/straddle';

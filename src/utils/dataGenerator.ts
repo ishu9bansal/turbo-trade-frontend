@@ -12,11 +12,11 @@ export class StraddleDataGenerator {
   private volatility: number;
   private trendDirection: number;
 
-  constructor(baseSpotPrice = 19750, startTime?: Date) {
+  constructor(baseSpotPrice = 19750) {
     this.baseSpotPrice = baseSpotPrice;
     
     // Set market open time to 9:15 AM
-    this.marketOpenTime = startTime || new Date();
+    this.marketOpenTime = new Date();
     this.marketOpenTime.setHours(9, 15, 0, 0);
     
     this.currentTime = new Date(this.marketOpenTime);
@@ -79,7 +79,7 @@ export class StraddleDataGenerator {
     
     // Generate premiums for all strikes
     const snapshot: PremiumSnapshot = {
-      timestamp: this.formatTime(this.currentTime),
+      timestamp: this.currentTime.getTime(),
       spotPrice: Math.round(spotPrice * 100) / 100,
       premiums: {
         '-3': this.calculatePremium(-3, spotPrice, timeElapsed),
@@ -97,13 +97,6 @@ export class StraddleDataGenerator {
     
     this.dataPoints.push(snapshot);
     return snapshot;
-  }
-
-  /**
-   * Format time as HH:MM:SS
-   */
-  private formatTime(date: Date): string {
-    return date.toTimeString().split(' ')[0];
   }
 
   /**

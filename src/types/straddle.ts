@@ -1,7 +1,7 @@
 // Type definitions for Straddle Premium Visualization
 
 export interface PremiumSnapshot {
-  timestamp: string; // HH:MM:SS format
+  timestamp: number; // milliseconds since epoch
   spotPrice: number;
   premiums: {
     '-3': number;
