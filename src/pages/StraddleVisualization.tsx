@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   LineChart,
   Line,
@@ -9,13 +9,12 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setData, addSnapshot, setSimulating } from '../store/straddleSlice';
-import { loadStraddleData, saveStraddleData, clearStraddleData } from '../utils/localStorage';
-import { StraddleDataSimulator } from '../utils/apiServiceSimulator';
+import { useAppSelector } from '../store/hooks';
+import { selectData } from '../store/straddleSlice';
 import ContainerLayout from '../components/Layout/ContainerLayout';
 import { Box, Button, Typography, Paper } from '@mui/material';
 import type { PremiumSnapshot } from '../types/straddle';
+import { useStraddleFetch } from '../hooks/straddle';
 
 const XAXIS_TICK_INTERVAL = 15 * 60; // 30 minutes in seconds
 const TOTAL_SIMULATION_DURATION = 6 * 60 * 60; // 6 hours in seconds
@@ -35,72 +34,13 @@ const tickValueGenerator = (index: number) => {
 const EMPTY_DATA = Array.from({ length: TOTAL_SIMULATION_DURATION / 5 }, (_, i) => ({ time: tickValueGenerator(i) }));
 
 const StraddleVisualization: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const { data, isSimulating } = useAppSelector((state) => state.straddle);
-  const simulatorRef = useRef<StraddleDataSimulator | null>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const data = useAppSelector(selectData);
+  const fetcher = useStraddleFetch();
 
-  // Load data from localStorage on mount
   useEffect(() => {
-    const savedData = loadStraddleData();
-    if (savedData.length > 0) {
-      dispatch(setData(savedData));
-    }
-  }, [dispatch]);
-
-  // Save data to localStorage whenever it changes
-  useEffect(() => {
-    if (data.length > 0) {
-      saveStraddleData(data);
-    }
-  }, [data]);
-
-  // Initialize simulator and start simulation
-  const startSimulation = () => {
-    if (!simulatorRef.current) {
-      simulatorRef.current = new StraddleDataSimulator(19750);
-      
-      // Generate initial historical data
-      const initialData = simulatorRef.current.generateInitialData(360);
-      dispatch(setData(initialData));
-    }
-
-    dispatch(setSimulating(true));
-
-    // Start polling every 5 seconds to add new data points
-    intervalRef.current = setInterval(() => {
-      if (simulatorRef.current) {
-        const newSnapshot = simulatorRef.current.generateNextSnapshot();
-        dispatch(addSnapshot(newSnapshot));
-      }
-    }, 5000);
-  };
-
-  // Stop simulation
-  const stopSimulation = () => {
-    dispatch(setSimulating(false));
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  };
-
-  // Reset and clear all data
-  const resetData = () => {
-    stopSimulation();
-    dispatch(setData([]));
-    clearStraddleData();
-    simulatorRef.current = null;
-  };
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, []);
+    const interval = setInterval(fetcher, 5000);
+    return () => clearInterval(interval);
+  }, [fetcher]);
 
   // Transform data for Recharts
   const chartData = [
@@ -162,7 +102,7 @@ const StraddleVisualization: React.FC = () => {
         </Box>
 
         {/* Controls */}
-        <Box sx={{ marginBottom: 3, display: 'flex', gap: 2 }}>
+        {/* <Box sx={{ marginBottom: 3, display: 'flex', gap: 2 }}>
           <Button
             variant="contained"
             color="primary"
@@ -182,7 +122,7 @@ const StraddleVisualization: React.FC = () => {
           <Button variant="outlined" color="error" onClick={resetData}>
             Reset Data
           </Button>
-        </Box>
+        </Box> */}
 
         {/* Chart */}
         <Paper
@@ -354,7 +294,7 @@ const StraddleVisualization: React.FC = () => {
         <Box sx={{ marginTop: 3 }}>
           <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
             <strong>Data Points:</strong> {data.length} | <strong>Status:</strong>{' '}
-            {isSimulating ? 'Updating live (every 5s)' : 'Paused'}
+            {false ? 'Updating live (every 5s)' : 'Paused'}
           </Typography>
           <Typography
             variant="caption"

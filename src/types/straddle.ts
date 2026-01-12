@@ -13,8 +13,3 @@ export interface PremiumSnapshot {
     '3': number;
   };
 }
-
-export interface StraddleState {
-  data: PremiumSnapshot[];
-  isSimulating: boolean;
-}
