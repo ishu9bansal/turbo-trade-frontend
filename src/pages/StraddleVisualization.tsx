@@ -15,6 +15,11 @@ import { loadStraddleData, saveStraddleData, clearStraddleData } from '../utils/
 import { StraddleDataSimulator } from '../utils/dataSimulator';
 import ContainerLayout from '../components/Layout/ContainerLayout';
 import { Box, Button, Typography, Paper } from '@mui/material';
+import type { PremiumSnapshot } from '../types/straddle';
+
+const XAXIS_TICK_INTERVAL = 15 * 60; // 30 minutes in seconds
+const TOTAL_SIMULATION_DURATION = 6 * 60 * 60; // 3 hours in seconds
+const MARKET_OPEN_TIME = 9.5 * 60 * 60; // 9:30 AM in seconds
 
 const StraddleVisualization: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -85,7 +90,7 @@ const StraddleVisualization: React.FC = () => {
   }, []);
 
   // Transform data for Recharts
-  const chartData = data.map((snapshot) => ({
+  const chartData = data.map((snapshot: PremiumSnapshot) => ({
     time: snapshot.timestamp,
     spotPrice: snapshot.spotPrice,
     'Strike -3': snapshot.premiums['-3'],
@@ -194,14 +199,20 @@ const StraddleVisualization: React.FC = () => {
                 
                 {/* X-axis: Time */}
                 <XAxis
-                  dataKey="time"
                   stroke="rgba(255, 255, 255, 0.6)"
                   tick={{ fill: 'rgba(255, 255, 255, 0.6)', fontSize: 12 }}
                   tickFormatter={(value) => {
                     // Show only HH:MM for cleaner display
-                    return value.substring(0, 5);
+                    const secondsFromMarketOpen = 5*value;
+                    const totalSeconds = MARKET_OPEN_TIME + secondsFromMarketOpen;
+                    const hours = Math.floor(totalSeconds / 3600);
+                    const minutes = Math.floor((totalSeconds % 3600) / 60);
+                    return `${hours.toString().padStart(2, '0')}:${minutes
+                      .toString()
+                      .padStart(2, '0')}`;
                   }}
-                  interval="preserveStartEnd"
+                  interval={XAXIS_TICK_INTERVAL/5} // ticks are every 5 seconds
+                  domain={[150,TOTAL_SIMULATION_DURATION/5]}
                 />
                 
                 {/* Left Y-axis: Premium (₹) */}
@@ -215,6 +226,7 @@ const StraddleVisualization: React.FC = () => {
                     position: 'insideLeft',
                     style: { fill: 'rgba(255, 255, 255, 0.6)' },
                   }}
+                  domain={['dataMin', 'dataMax']}
                 />
                 
                 {/* Right Y-axis: Spot Price */}
@@ -229,6 +241,7 @@ const StraddleVisualization: React.FC = () => {
                     position: 'insideRight',
                     style: { fill: 'rgba(255, 255, 255, 0.4)' },
                   }}
+                  domain={['dataMin', 'dataMax']}
                 />
                 
                 <Tooltip content={<CustomTooltip />} />
@@ -310,7 +323,7 @@ const StraddleVisualization: React.FC = () => {
                   yAxisId="right"
                   type="monotone"
                   dataKey="spotPrice"
-                  stroke="rgba(200, 200, 200, 0.5)"
+                  stroke="rgba(255, 0, 0, 0.5)"
                   strokeWidth={1.5}
                   dot={false}
                   name="Spot Price"
