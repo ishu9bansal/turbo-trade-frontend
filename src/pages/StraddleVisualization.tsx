@@ -16,8 +16,8 @@ import { Box, Button, Typography, Paper } from '@mui/material';
 import type { PremiumSnapshot } from '../types/straddle';
 import { useStraddleFetch } from '../hooks/straddle';
 
-const XAXIS_TICK_INTERVAL = 15 * 60; // 30 minutes in seconds
-const TOTAL_SIMULATION_DURATION = 6 * 60 * 60; // 6 hours in seconds
+const XAXIS_TICK_INTERVAL = 15 * 60; // 15 minutes in seconds
+const TOTAL_SIMULATION_DURATION = 6 * 60 * 60 / 6; // 6 hours in seconds
 const MARKET_OPEN_TIME = 9.5 * 60 * 60; // 9:30 AM in seconds
 const tickValueGenerator = (index: number) => {
     //  HH:MM:SS format
@@ -31,7 +31,7 @@ const tickValueGenerator = (index: number) => {
         .padStart(2, '0')}:${seconds.toString()
         .padStart(2, '0')}`;
 }
-const EMPTY_DATA = Array.from({ length: TOTAL_SIMULATION_DURATION / 5 }, (_, i) => ({ time: tickValueGenerator(i) }));
+const EMPTY_DATA = Array.from({ length: 1 + TOTAL_SIMULATION_DURATION / 5 }, (_, i) => ({ time: tickValueGenerator(i) }));
 
 const StraddleVisualization: React.FC = () => {
   const data = useAppSelector(selectData);
@@ -168,7 +168,6 @@ const StraddleVisualization: React.FC = () => {
                       .padStart(2, '0')}`;
                   }}
                   interval={XAXIS_TICK_INTERVAL/5} // ticks are every 5 seconds
-                  domain={[150,TOTAL_SIMULATION_DURATION/5]}
                 />
                 
                 {/* Left Y-axis: Premium (₹) */}
